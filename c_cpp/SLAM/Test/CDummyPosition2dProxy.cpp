@@ -17,10 +17,16 @@ CDummyPosition2dProxy::~CDummyPosition2dProxy() {
 }
 
 double CDummyPosition2dProxy::GetXSpeed() {
+	// TODO implement me
+	return 0.0;
 }
 
 double CDummyPosition2dProxy::GetYSpeed() {
+	// TODO implement me
+	return 0.0;
 }
 
 double CDummyPosition2dProxy::GetYawSpeed() {
+	// TODO implement me
+	return 0.0;
 }
