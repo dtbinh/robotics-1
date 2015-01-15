@@ -22,6 +22,8 @@ int main(void)
 
 	printf("Delta time: %f\n", dTime);
 
+	cb.runTask(NULL, NULL);
+
 	delete FileWriter;
 
 	return 0;

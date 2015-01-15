@@ -160,9 +160,6 @@ int CBaseTest::addPoint(double x, double y, double &dx, double &dy, double &da, 
 		writePtsToFile();
 	}
 
-	// Debug output
-	printf("Adding point with coordinates: x=%f, y=%f, th=%f\n", x, y, 0.0);
-
 	return flagInsert||flagLine;
 }
 
@@ -681,7 +678,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 			PC = PC*0.0;
 			PC = PC*IM;
 			PC = PC*0.04;
-			//printf("mA size: %d\n", OPC.Nrows());
+//			printf("mA size: %d\n", OPC.Nrows());
 			for (int i = 1; i <= OPC.Nrows(); i++) {
 				for (int j = 1; j <= OPC.Ncols(); j++) {
 					PC(i,j) = OPC(i,j);
@@ -694,7 +691,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 
 			//printf("mA size: %d\n", matrAsize);
 			int n = 4;
-			list<lns>::iterator pL;
+			std::list<lns>::iterator pL;
 			if (!lLines.empty())
 				for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
 					XC(n++,1) = pL->r;
@@ -885,7 +882,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 
 				PC = PZ - MW*MS*MW.t();
 
-				//printf("x: %f, y: %f, a: %f\n", currentX, currentY, rtod(currentAngle));
+				printf("x: %f, y: %f, a: %f\n", currentX, currentY, rtod(currentAngle));
 			} else {
 				PC.ReSize(matrAsize, matrAsize);
 				XC.ReSize(matrAsize, 1);
