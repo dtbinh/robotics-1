@@ -614,429 +614,430 @@ void CBaseTest::writeLnsToFile() {
 }
 
 int CBaseTest::runTask(int argc, char* argv[]) {
-
-	int scCycle = 0;
-
-	sprintf(filename, "./map.txt");
-	fp = fopen(filename,"w");
-	fclose(fp);
-	sprintf(filename, "./map1.txt");
-	fp = fopen(filename,"w");
-	fclose(fp);
-	fp = fopen("./trajectory.txt","w");
-	fclose(fp);
-	fp = fopen("./calc1.txt","w");
-	fclose(fp);
-	fp = fopen("./calc.txt","w");
-	fclose(fp);
-	fp = fopen("./angle.txt","w");
-	fclose(fp);
-	fp = fopen("./scan_err.txt","w");
-	fclose(fp);
-
-	int numScan = 0;
-
-	Matrix A(3,3);
-	Matrix B(3,2);
-	Matrix BB(3,2);
-	Matrix C(48,48);
-	Matrix F(3,1);
-	Matrix P(3,3);
-	Matrix U(2,1);
-
-	Matrix N(48,3);
-
-	Matrix V(2,2);
-
-	Matrix XC(3,1);
-	Matrix PC(3,3);
-	Matrix OPC(3,3);
-	Matrix XZ(3,1);
-	Matrix PZ(3,3);
-	Matrix Y(3,1);
-	Matrix VU(3,1);
-	Matrix MS(3,3);
-	Matrix MW(3,3);
-
-	Matrix RC(3,3);		//Robot coordinates
-	Matrix RY(3,3);		//Robot yaw
-	Matrix SC(3,3);		//Sensor coordinates
-	Matrix SY(3,3);		//Sensor yaw
-	Matrix SM(3,3);		//Sensor measurment
-	Matrix OD(3,1);		//Obstacle displacement
-	Matrix OC(3,1);		//Obstacle coordinates
-	Matrix GL(2,1);
-	Matrix H(2,3);
-	Matrix MZ(32, 1);
-	Matrix MM(32, 1);
-
-	robot.Read();
-
-	char *msh;
-
-	double matrXC[] = { currentX, currentY, currentAngle };
-	XC << matrXC;
-
-	double xdp = 0, ydp = 0, adp = 0;
-
-	for(;;)
-  	{
-    	robot.Read();
-		dT = getDeltaTime();
-		currentV = sqrt(pp.GetXSpeed()*pp.GetXSpeed() + pp.GetYSpeed()*pp.GetYSpeed());
-		currentW = pp.GetYawSpeed();
-		if (numScan == 0) {
-
-		}
-
-		for (int i=0; i<16; i++) {
-			sp[i] = sp1->GetScan(i);
-		}
-	  	numScan = (numScan<=1) ? 1:0;
-
-		findLocalLines();
-
-		double dx[16], dy[16], da[16];
-		double xdisp=0, ydisp=0, adisp = 0, cntDisp = 0;
-
-		try {
-			int matrAsize = lLines.size()*2 + 3;
-			IdentityMatrix IM(matrAsize);
-			DiagonalMatrix DM(matrAsize);
-
-///************************************************************** Kalman filter
-
-
-			if (numScan == 0) {
-				PC.ReSize(matrAsize, matrAsize);
-				PC = PC*0.0;
-				PC = PC*IM;
-				PC = PC*0.04;
-				//cout << DD+IM << endl;
-			}// else {
-
-			OPC.ReSize(PC.Nrows(), PC.Ncols());
-			OPC = PC;
-			PC.ReSize(matrAsize, matrAsize);
-			PC = PC*0.0;
-			PC = PC*IM;
-			PC = PC*0.04;
-			//printf("mA size: %d\n", OPC.Nrows());
-			for (int i = 1; i <= OPC.Nrows(); i++) {
-				for (int j = 1; j <= OPC.Ncols(); j++) {
-					PC(i,j) = OPC(i,j);
-				}
-			}
-			XC.ReSize(matrAsize, 1);
-			XC(1,1) = currentX;
-			XC(2,1) = currentY;
-			XC(3,1) = currentAngle;
-
-			//printf("mA size: %d\n", matrAsize);
-			int n = 4;
-			list<lns>::iterator pL;
-			if (!lLines.empty())
-				for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
-					XC(n++,1) = pL->r;
-					XC(n++,1) = pL->th;
-				}
-
-			U << currentV << currentW;
-
-			B.ReSize(matrAsize, 2);
-			B = B*0.0;
-			B(1,1) = dT*cos(XC(3,1));
-			B(2,1) = dT*sin(XC(3,1));
-			B(3,2) = dT;
-
-			A.ReSize(matrAsize, matrAsize);
-			A = A*0.0;
-			A = A*IM;
-			A(1,3) = -dT*sin(XC(3,1));
-			A(2,3) = dT*cos(XC(3,1));
-
-//----------------------------------------------------------------------predict
-			//V.ReSize(2, 2);
-			//V = V*0.0;
-			V(1,1) =  0.04;
-			V(2,2) =  0.04;
-
-			BB.ReSize(matrAsize, 2);
-			BB = BB*0.0;
-
-			BB(1,1) = 1;
-			BB(2,2) = 1;
-
-			XZ.ReSize(matrAsize, 1);
-			XZ = A*XC+BB*U;
-			XZ(3,1) = normalize(XZ(3,1));
-			PZ.ReSize(matrAsize, matrAsize);
-			PZ = A*PC*A.t()+B*V*B.t();
-
-			currentX = XZ(1,1);
-			currentY = XZ(2,1);
-			currentAngle = XZ(3,1);
-
-			for (int i=0; i<16; i++) {
-				double d1, beta, oxr, oyr;
-
-				oxr = sp[i]*cos(dtor(sensPosition[i][2]))+(sensPosition[i][0]);
-				oyr = sp[i]*sin(dtor(sensPosition[i][2]))+sensPosition[i][1];
-
-				d1 = sqrt(oxr*oxr+oyr*oyr);
-				beta = atan2(oyr,oxr);
-
-				obstacleX[i] = oxr;
-				obstacleY[i] = oyr;
-
-				double obX, obY;
-
-				//try
-				{
-					double matrRC[] = { 1,0,currentX,0,1,currentY,0,0,1 };
-					double matrRY[] = { cos(currentAngle),-sin(currentAngle),0,sin(currentAngle),cos(currentAngle),0,0,0,1 };
-					double matrSC[] = { 1,0,sensPosition[i][0],0,1,sensPosition[i][1],0,0,1 };
-					double matrSY[] = { cos(dtor(sensPosition[i][2])),-sin(dtor(sensPosition[i][2])),0,sin(dtor(sensPosition[i][2])),cos(dtor(sensPosition[i][2])),0,0,0,1 };
-					double matrSM[] = { 1,0,sp[i],0,1, 0,0,0,1 };
-					double matrOD[] = { 0,0,1 };
-
-					RC << matrRC;
-					RY << matrRY;
-					SC << matrSC;
-					SY << matrSY;
-					SM << matrSM;
-					OD << matrOD;
-
-					OC = RC*RY*SC*SY*SM*OD;
-							//cout << OC;
-
-					obX = OC(1,1);
-					obY = OC(2,1);
-
-				} //CatchAll { cout << BaseException::what(); }
-
-
-				//obX = currentX + (sp[i] + sD)*cos(dtor(sensPosition[i][2])+currentAngle);
-				//obY = currentY + (sp[i] + sD)*sin(dtor(sensPosition[i][2])+currentAngle);
-				dx[i] = 0;
-				dy[i] = 0;
-				//da[i] = normalize(dtor(sensPosition[i][2]));
-				da[i] = 0;
-				if (sp[i] < maxSonarVal) {
-					if(!addNewPoint(roundDec(obX), roundDec(obY), dx[i], dy[i], da[i], true, i)) {
-					}
-				}
-			}
-
-			xdisp = 0;
-			ydisp = 0;
-			adisp = 0;
-			cntDisp = 0;
-			for (int i=0; i<16; i++) {
-				if ((dx[i]!=0)||(dy[i]!=0)||(da[i]!=0)) {
-					xdisp += dx[i];
-					ydisp += dy[i];
-					adisp += da[i];//+= (da[i]-normalize(dtor(sensPosition[i][2]+90)));
-					cntDisp++;
-				}
-			}
-
-			if ((cntDisp > 0)&&((currentV != 0.0)||(currentW != 0.0))) {
-				if (cntDisp > 0) {
-					xdisp /= cntDisp;
-					ydisp /= cntDisp;
-					adisp /= cntDisp;
-					adisp = normalize(adisp);
-				}
-				double xko = 0.5, yko = 0.5, ako = 5.0;
-
-//------------------------------------------------------------------ correction
-
-				int llinNum[16];
-				int q=0;
-				int outLen = 0;
-				double matMZ[16][2];
-				for (int i=0; i<16; i++) {
-					if (linNum[i]!=0) {
-						llinNum[q] = linNum[i];
-						matMZ[q][0] = localLines[i].r;
-						matMZ[q][1] = localLines[i].th;
-						q++;
-					}
-				}
-
-
-				C.ReSize(matrAsize, matrAsize);
-				C = C*0.0;
-				C = C*IM;
-				C = C*0.04;
-
-				N.ReSize(q*2, matrAsize);
-				MM.ReSize(q*2,1);
-				MM = MM*0.0;
-				MZ.ReSize(q*2,1);
-				N = N*0.0;
-
-				for (int i=0; i<q; i++) {
-					double Ci,ci, ai, pi, xr, yr, fir;
-					int j;
-					MZ(i*2+1, 1) = matMZ[i][0];
-					MZ(i*2+2, 1) = matMZ[i][1];
-					j = llinNum[i];
-					pi = XZ(j+3,1);
-					ai = XZ(j+4,1);
-					xr = XZ(1,1);
-					yr = XZ(2,1);
-					fir = XZ(3,1);
-					Ci = pi - xr*cos(ai) - yr*sin(ai);
-					ci = sign(Ci);
-					N(i*2+1, 1) = -ci*cos(ai);
-					N(i*2+1, 2) = -ci*sin(ai);
-					N(i*2+1, 3) = 0.0;
-					N(i*2+1, j+3) = ci;
-					N(i*2+1, j+4) = ci*(xr*sin(ai)-yr*cos(ai));
-					N(i*2+2, 3) = -1.0;
-					N(i*2+2, j+2) = 1.0;
-
-					MM(i*2+1, 1) = abs(Ci);
-					MM(i*2+2, 1) = normalize(ai - fir + (1-ci)*dtor(180));
-				}
-
-
-				MS = N*PZ*N.t() + C;
-
-				MW = PZ*N.t()*MS.i();
-
-				PC.ReSize(matrAsize, matrAsize);
-				XC.ReSize(matrAsize, 1);
-
-				XC = XZ + MW*(MZ - MM);
-				XC(3,1) = normalize(XC(3,1));
-
-				PC = PZ - MW*MS*MW.t();
-
-				//printf("x: %f, y: %f, a: %f\n", currentX, currentY, rtod(currentAngle));
-			} else {
-				PC.ReSize(matrAsize, matrAsize);
-				XC.ReSize(matrAsize, 1);
-				XC = XZ;
-				PC = PZ;
-			}
-				currentX = XC(1,1);
-				currentY = XC(2,1);
-				currentAngle = XC(3,1);
-				prevX = XC(1,1);
-				prevY = XC(2,1);
-				prevAngle = XC(3,1);
-				prevV = currentV;
-				prevW = currentW;
-
-			n = 4;
-			//list<lns>::iterator pL;
-			if (!lLines.empty())
-				for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
-					pL->r = XC(n++,1);
-					pL->th = normalize(XC(n++,1));
-				}
-			writeLnsToFile();
-						//printf("x: %f, y: %f, a: %f\n", cntDisp, currentY, rtod(currentAngle));
-				//}
-			if (cntDisp == 0)
-			for (int i=0; i<16; i++) {
-
-				//double sD = sqrt((sensPosition[i][0]+0.04)*(sensPosition[i][0]+0.04)+sensPosition[i][1]*sensPosition[i][1]);
-
-				double d1, beta, oxr, oyr;
-
-				oxr = sp[i]*cos(dtor(sensPosition[i][2]))+(sensPosition[i][0]);
-				oyr = sp[i]*sin(dtor(sensPosition[i][2]))+sensPosition[i][1];
-
-				d1 = sqrt(oxr*oxr+oyr*oyr);
-				beta = atan2(oyr,oxr);
-
-				obstacleX[i] = oxr;
-				obstacleY[i] = oyr;
-
-				double obX, obY;
-
-				//try
-				{
-					double matrRC[] = { 1,0,currentX,0,1,currentY,0,0,1 };
-					double matrRY[] = { cos(currentAngle),-sin(currentAngle),0,sin(currentAngle),cos(currentAngle),0,0,0,1 };
-					double matrSC[] = { 1,0,sensPosition[i][0],0,1,sensPosition[i][1],0,0,1 };
-					double matrSY[] = { cos(dtor(sensPosition[i][2])),-sin(dtor(sensPosition[i][2])),0,sin(dtor(sensPosition[i][2])),cos(dtor(sensPosition[i][2])),0,0,0,1 };
-					double matrSM[] = { 1,0,sp[i],0,1, 0,0,0,1 };
-					double matrOD[] = { 0,0,1 };
-
-					RC << matrRC;
-					RY << matrRY;
-					SC << matrSC;
-					SY << matrSY;
-					SM << matrSM;
-					OD << matrOD;
-
-					OC = RC*RY*SC*SY*SM*OD;
-
-					obX = OC(1,1);
-					obY = OC(2,1);
-
-				} // CatchAll { cout << BaseException::what(); }
-
-
-				//obX = currentX + (sp[i] + sD)*cos(dtor(sensPosition[i][2])+currentAngle);
-				//obY = currentY + (sp[i] + sD)*sin(dtor(sensPosition[i][2])+currentAngle);
-				dx[i] = 0;
-				dy[i] = 0;
-				da[i] = normalize(dtor(sensPosition[i][2]+90));
-
-				if (sp[i] < maxSonarVal) {
-					if(!addNewPoint(roundDec(obX), roundDec(obY), dx[i], dy[i], da[i], false, i)) {
-					}
-					//da[i] = normalize(da[i] - dtor(sensPosition[i][2]));
-					sprintf(filename, "./map.txt");
-					fp = fopen(filename,"a");
-					fprintf(fp,"%f\t%f\n", obX, obY);
-					fclose(fp);
-					sprintf(filename, "./map1.txt");
-					fp = fopen(filename,"a");
-					fprintf(fp,"%f\t%f\n", obX+dx[i], obY+dy[i]);
-					fclose(fp);
-				}
-			}
-		} CatchAll { cout << BaseException::what(); }
-
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  -kalman
-
-		//printf("calc angle: %f calc x: %f calc y: %f deltaТ: %f\n", rtod(currentAngle), currentX, currentY, dT);
-		//printf("real angle: %f real x: %f real y: %f deltaТ: %f\n", rtod(pp.GetYaw()), pp.GetXPos(), pp.GetYPos(), dT);
-		//printf("calc spd W: %f spd V: %f\n", rtod(currentW), currentV);
-		//pp.SetOdometry(currentX+xdisp, currentY+ydisp, currentAngle);
-	  	//pp.GoTo(currentX+xdisp, currentY+ydisp, currentAngle);
-		fp = fopen("./calc1.txt","a");
-			fprintf(fp,"%f\t%f\n", currentX+xdisp, currentY+ydisp);
-		  	xdp = xdisp;
-		  	ydp = ydisp;
-		  	adp = normalize(adisp+adp);
-			fclose(fp);
-		  	//printf
-		//}
-
-		if (lPoints.size()>20) {
-			findNewLines();
-		}
-		//if (scCycle>2)
-		//	findLines(sp);
-		//else
-		//	scCycle++;
-
-		fp = fopen("./trajectory.txt","a");
-		fprintf(fp,"%f\t%f\n", currentX, currentY);
-		fclose(fp);
-
-		//printf ("round: %f %f %f %f\n", roundDec(3.33), roundDec(3.38), roundDec(-3.33), roundDec(-3.38));
-
-		setSpeeds((void *) msh);
-	}
+//
+//	int scCycle = 0;
+//
+////	Already done with initialization of CFileWriter
+////	sprintf(filename, "./map.txt");
+////	fp = fopen(filename,"w");
+////	fclose(fp);
+////	sprintf(filename, "./map1.txt");
+////	fp = fopen(filename,"w");
+////	fclose(fp);
+////	fp = fopen("./trajectory.txt","w");
+////	fclose(fp);
+////	fp = fopen("./calc1.txt","w");
+////	fclose(fp);
+////	fp = fopen("./calc.txt","w");
+////	fclose(fp);
+////	fp = fopen("./angle.txt","w");
+////	fclose(fp);
+////	fp = fopen("./scan_err.txt","w");
+////	fclose(fp);
+//
+//	int numScan = 0;
+//
+//	Matrix A(3,3);
+//	Matrix B(3,2);
+//	Matrix BB(3,2);
+//	Matrix C(48,48);
+//	Matrix F(3,1);
+//	Matrix P(3,3);
+//	Matrix U(2,1);
+//
+//	Matrix N(48,3);
+//
+//	Matrix V(2,2);
+//
+//	Matrix XC(3,1);
+//	Matrix PC(3,3);
+//	Matrix OPC(3,3);
+//	Matrix XZ(3,1);
+//	Matrix PZ(3,3);
+//	Matrix Y(3,1);
+//	Matrix VU(3,1);
+//	Matrix MS(3,3);
+//	Matrix MW(3,3);
+//
+//	Matrix RC(3,3);		//Robot coordinates
+//	Matrix RY(3,3);		//Robot yaw
+//	Matrix SC(3,3);		//Sensor coordinates
+//	Matrix SY(3,3);		//Sensor yaw
+//	Matrix SM(3,3);		//Sensor measurment
+//	Matrix OD(3,1);		//Obstacle displacement
+//	Matrix OC(3,1);		//Obstacle coordinates
+//	Matrix GL(2,1);
+//	Matrix H(2,3);
+//	Matrix MZ(32, 1);
+//	Matrix MM(32, 1);
+//
+//	robot.Read();
+//
+//	char *msh;
+//
+//	double matrXC[] = { currentX, currentY, currentAngle };
+//	XC << matrXC;
+//
+//	double xdp = 0, ydp = 0, adp = 0;
+//
+//	for(;;)
+//  	{
+//    	robot.Read();
+//		dT = getDeltaTime();
+//		currentV = sqrt(pp.GetXSpeed()*pp.GetXSpeed() + pp.GetYSpeed()*pp.GetYSpeed());
+//		currentW = pp.GetYawSpeed();
+//		if (numScan == 0) {
+//
+//		}
+//
+//		for (int i=0; i<16; i++) {
+//			sp[i] = sp1->GetScan(i);
+//		}
+//	  	numScan = (numScan<=1) ? 1:0;
+//
+//		findLocalLines();
+//
+//		double dx[16], dy[16], da[16];
+//		double xdisp=0, ydisp=0, adisp = 0, cntDisp = 0;
+//
+//		try {
+//			int matrAsize = lLines.size()*2 + 3;
+//			IdentityMatrix IM(matrAsize);
+//			DiagonalMatrix DM(matrAsize);
+//
+/////************************************************************** Kalman filter
+//
+//
+//			if (numScan == 0) {
+//				PC.ReSize(matrAsize, matrAsize);
+//				PC = PC*0.0;
+//				PC = PC*IM;
+//				PC = PC*0.04;
+//				//cout << DD+IM << endl;
+//			}// else {
+//
+//			OPC.ReSize(PC.Nrows(), PC.Ncols());
+//			OPC = PC;
+//			PC.ReSize(matrAsize, matrAsize);
+//			PC = PC*0.0;
+//			PC = PC*IM;
+//			PC = PC*0.04;
+//			//printf("mA size: %d\n", OPC.Nrows());
+//			for (int i = 1; i <= OPC.Nrows(); i++) {
+//				for (int j = 1; j <= OPC.Ncols(); j++) {
+//					PC(i,j) = OPC(i,j);
+//				}
+//			}
+//			XC.ReSize(matrAsize, 1);
+//			XC(1,1) = currentX;
+//			XC(2,1) = currentY;
+//			XC(3,1) = currentAngle;
+//
+//			//printf("mA size: %d\n", matrAsize);
+//			int n = 4;
+//			list<lns>::iterator pL;
+//			if (!lLines.empty())
+//				for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
+//					XC(n++,1) = pL->r;
+//					XC(n++,1) = pL->th;
+//				}
+//
+//			U << currentV << currentW;
+//
+//			B.ReSize(matrAsize, 2);
+//			B = B*0.0;
+//			B(1,1) = dT*cos(XC(3,1));
+//			B(2,1) = dT*sin(XC(3,1));
+//			B(3,2) = dT;
+//
+//			A.ReSize(matrAsize, matrAsize);
+//			A = A*0.0;
+//			A = A*IM;
+//			A(1,3) = -dT*sin(XC(3,1));
+//			A(2,3) = dT*cos(XC(3,1));
+//
+////----------------------------------------------------------------------predict
+//			//V.ReSize(2, 2);
+//			//V = V*0.0;
+//			V(1,1) =  0.04;
+//			V(2,2) =  0.04;
+//
+//			BB.ReSize(matrAsize, 2);
+//			BB = BB*0.0;
+//
+//			BB(1,1) = 1;
+//			BB(2,2) = 1;
+//
+//			XZ.ReSize(matrAsize, 1);
+//			XZ = A*XC+BB*U;
+//			XZ(3,1) = normalize(XZ(3,1));
+//			PZ.ReSize(matrAsize, matrAsize);
+//			PZ = A*PC*A.t()+B*V*B.t();
+//
+//			currentX = XZ(1,1);
+//			currentY = XZ(2,1);
+//			currentAngle = XZ(3,1);
+//
+//			for (int i=0; i<16; i++) {
+//				double d1, beta, oxr, oyr;
+//
+//				oxr = sp[i]*cos(dtor(sensPosition[i][2]))+(sensPosition[i][0]);
+//				oyr = sp[i]*sin(dtor(sensPosition[i][2]))+sensPosition[i][1];
+//
+//				d1 = sqrt(oxr*oxr+oyr*oyr);
+//				beta = atan2(oyr,oxr);
+//
+//				obstacleX[i] = oxr;
+//				obstacleY[i] = oyr;
+//
+//				double obX, obY;
+//
+//				//try
+//				{
+//					double matrRC[] = { 1,0,currentX,0,1,currentY,0,0,1 };
+//					double matrRY[] = { cos(currentAngle),-sin(currentAngle),0,sin(currentAngle),cos(currentAngle),0,0,0,1 };
+//					double matrSC[] = { 1,0,sensPosition[i][0],0,1,sensPosition[i][1],0,0,1 };
+//					double matrSY[] = { cos(dtor(sensPosition[i][2])),-sin(dtor(sensPosition[i][2])),0,sin(dtor(sensPosition[i][2])),cos(dtor(sensPosition[i][2])),0,0,0,1 };
+//					double matrSM[] = { 1,0,sp[i],0,1, 0,0,0,1 };
+//					double matrOD[] = { 0,0,1 };
+//
+//					RC << matrRC;
+//					RY << matrRY;
+//					SC << matrSC;
+//					SY << matrSY;
+//					SM << matrSM;
+//					OD << matrOD;
+//
+//					OC = RC*RY*SC*SY*SM*OD;
+//							//cout << OC;
+//
+//					obX = OC(1,1);
+//					obY = OC(2,1);
+//
+//				} //CatchAll { cout << BaseException::what(); }
+//
+//
+//				//obX = currentX + (sp[i] + sD)*cos(dtor(sensPosition[i][2])+currentAngle);
+//				//obY = currentY + (sp[i] + sD)*sin(dtor(sensPosition[i][2])+currentAngle);
+//				dx[i] = 0;
+//				dy[i] = 0;
+//				//da[i] = normalize(dtor(sensPosition[i][2]));
+//				da[i] = 0;
+//				if (sp[i] < maxSonarVal) {
+//					if(!addNewPoint(roundDec(obX), roundDec(obY), dx[i], dy[i], da[i], true, i)) {
+//					}
+//				}
+//			}
+//
+//			xdisp = 0;
+//			ydisp = 0;
+//			adisp = 0;
+//			cntDisp = 0;
+//			for (int i=0; i<16; i++) {
+//				if ((dx[i]!=0)||(dy[i]!=0)||(da[i]!=0)) {
+//					xdisp += dx[i];
+//					ydisp += dy[i];
+//					adisp += da[i];//+= (da[i]-normalize(dtor(sensPosition[i][2]+90)));
+//					cntDisp++;
+//				}
+//			}
+//
+//			if ((cntDisp > 0)&&((currentV != 0.0)||(currentW != 0.0))) {
+//				if (cntDisp > 0) {
+//					xdisp /= cntDisp;
+//					ydisp /= cntDisp;
+//					adisp /= cntDisp;
+//					adisp = normalize(adisp);
+//				}
+//				double xko = 0.5, yko = 0.5, ako = 5.0;
+//
+////------------------------------------------------------------------ correction
+//
+//				int llinNum[16];
+//				int q=0;
+//				int outLen = 0;
+//				double matMZ[16][2];
+//				for (int i=0; i<16; i++) {
+//					if (linNum[i]!=0) {
+//						llinNum[q] = linNum[i];
+//						matMZ[q][0] = localLines[i].r;
+//						matMZ[q][1] = localLines[i].th;
+//						q++;
+//					}
+//				}
+//
+//
+//				C.ReSize(matrAsize, matrAsize);
+//				C = C*0.0;
+//				C = C*IM;
+//				C = C*0.04;
+//
+//				N.ReSize(q*2, matrAsize);
+//				MM.ReSize(q*2,1);
+//				MM = MM*0.0;
+//				MZ.ReSize(q*2,1);
+//				N = N*0.0;
+//
+//				for (int i=0; i<q; i++) {
+//					double Ci,ci, ai, pi, xr, yr, fir;
+//					int j;
+//					MZ(i*2+1, 1) = matMZ[i][0];
+//					MZ(i*2+2, 1) = matMZ[i][1];
+//					j = llinNum[i];
+//					pi = XZ(j+3,1);
+//					ai = XZ(j+4,1);
+//					xr = XZ(1,1);
+//					yr = XZ(2,1);
+//					fir = XZ(3,1);
+//					Ci = pi - xr*cos(ai) - yr*sin(ai);
+//					ci = sign(Ci);
+//					N(i*2+1, 1) = -ci*cos(ai);
+//					N(i*2+1, 2) = -ci*sin(ai);
+//					N(i*2+1, 3) = 0.0;
+//					N(i*2+1, j+3) = ci;
+//					N(i*2+1, j+4) = ci*(xr*sin(ai)-yr*cos(ai));
+//					N(i*2+2, 3) = -1.0;
+//					N(i*2+2, j+2) = 1.0;
+//
+//					MM(i*2+1, 1) = abs(Ci);
+//					MM(i*2+2, 1) = normalize(ai - fir + (1-ci)*dtor(180));
+//				}
+//
+//
+//				MS = N*PZ*N.t() + C;
+//
+//				MW = PZ*N.t()*MS.i();
+//
+//				PC.ReSize(matrAsize, matrAsize);
+//				XC.ReSize(matrAsize, 1);
+//
+//				XC = XZ + MW*(MZ - MM);
+//				XC(3,1) = normalize(XC(3,1));
+//
+//				PC = PZ - MW*MS*MW.t();
+//
+//				//printf("x: %f, y: %f, a: %f\n", currentX, currentY, rtod(currentAngle));
+//			} else {
+//				PC.ReSize(matrAsize, matrAsize);
+//				XC.ReSize(matrAsize, 1);
+//				XC = XZ;
+//				PC = PZ;
+//			}
+//				currentX = XC(1,1);
+//				currentY = XC(2,1);
+//				currentAngle = XC(3,1);
+//				prevX = XC(1,1);
+//				prevY = XC(2,1);
+//				prevAngle = XC(3,1);
+//				prevV = currentV;
+//				prevW = currentW;
+//
+//			n = 4;
+//			//list<lns>::iterator pL;
+//			if (!lLines.empty())
+//				for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
+//					pL->r = XC(n++,1);
+//					pL->th = normalize(XC(n++,1));
+//				}
+//			writeLnsToFile();
+//						//printf("x: %f, y: %f, a: %f\n", cntDisp, currentY, rtod(currentAngle));
+//				//}
+//			if (cntDisp == 0)
+//			for (int i=0; i<16; i++) {
+//
+//				//double sD = sqrt((sensPosition[i][0]+0.04)*(sensPosition[i][0]+0.04)+sensPosition[i][1]*sensPosition[i][1]);
+//
+//				double d1, beta, oxr, oyr;
+//
+//				oxr = sp[i]*cos(dtor(sensPosition[i][2]))+(sensPosition[i][0]);
+//				oyr = sp[i]*sin(dtor(sensPosition[i][2]))+sensPosition[i][1];
+//
+//				d1 = sqrt(oxr*oxr+oyr*oyr);
+//				beta = atan2(oyr,oxr);
+//
+//				obstacleX[i] = oxr;
+//				obstacleY[i] = oyr;
+//
+//				double obX, obY;
+//
+//				//try
+//				{
+//					double matrRC[] = { 1,0,currentX,0,1,currentY,0,0,1 };
+//					double matrRY[] = { cos(currentAngle),-sin(currentAngle),0,sin(currentAngle),cos(currentAngle),0,0,0,1 };
+//					double matrSC[] = { 1,0,sensPosition[i][0],0,1,sensPosition[i][1],0,0,1 };
+//					double matrSY[] = { cos(dtor(sensPosition[i][2])),-sin(dtor(sensPosition[i][2])),0,sin(dtor(sensPosition[i][2])),cos(dtor(sensPosition[i][2])),0,0,0,1 };
+//					double matrSM[] = { 1,0,sp[i],0,1, 0,0,0,1 };
+//					double matrOD[] = { 0,0,1 };
+//
+//					RC << matrRC;
+//					RY << matrRY;
+//					SC << matrSC;
+//					SY << matrSY;
+//					SM << matrSM;
+//					OD << matrOD;
+//
+//					OC = RC*RY*SC*SY*SM*OD;
+//
+//					obX = OC(1,1);
+//					obY = OC(2,1);
+//
+//				} // CatchAll { cout << BaseException::what(); }
+//
+//
+//				//obX = currentX + (sp[i] + sD)*cos(dtor(sensPosition[i][2])+currentAngle);
+//				//obY = currentY + (sp[i] + sD)*sin(dtor(sensPosition[i][2])+currentAngle);
+//				dx[i] = 0;
+//				dy[i] = 0;
+//				da[i] = normalize(dtor(sensPosition[i][2]+90));
+//
+//				if (sp[i] < maxSonarVal) {
+//					if(!addNewPoint(roundDec(obX), roundDec(obY), dx[i], dy[i], da[i], false, i)) {
+//					}
+//					//da[i] = normalize(da[i] - dtor(sensPosition[i][2]));
+//					sprintf(filename, "./map.txt");
+//					fp = fopen(filename,"a");
+//					fprintf(fp,"%f\t%f\n", obX, obY);
+//					fclose(fp);
+//					sprintf(filename, "./map1.txt");
+//					fp = fopen(filename,"a");
+//					fprintf(fp,"%f\t%f\n", obX+dx[i], obY+dy[i]);
+//					fclose(fp);
+//				}
+//			}
+//		} CatchAll { cout << BaseException::what(); }
+//
+////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  -kalman
+//
+//		//printf("calc angle: %f calc x: %f calc y: %f deltaТ: %f\n", rtod(currentAngle), currentX, currentY, dT);
+//		//printf("real angle: %f real x: %f real y: %f deltaТ: %f\n", rtod(pp.GetYaw()), pp.GetXPos(), pp.GetYPos(), dT);
+//		//printf("calc spd W: %f spd V: %f\n", rtod(currentW), currentV);
+//		//pp.SetOdometry(currentX+xdisp, currentY+ydisp, currentAngle);
+//	  	//pp.GoTo(currentX+xdisp, currentY+ydisp, currentAngle);
+//		fp = fopen("./calc1.txt","a");
+//			fprintf(fp,"%f\t%f\n", currentX+xdisp, currentY+ydisp);
+//		  	xdp = xdisp;
+//		  	ydp = ydisp;
+//		  	adp = normalize(adisp+adp);
+//			fclose(fp);
+//		  	//printf
+//		//}
+//
+//		if (lPoints.size()>20) {
+//			findNewLines();
+//		}
+//		//if (scCycle>2)
+//		//	findLines(sp);
+//		//else
+//		//	scCycle++;
+//
+//		fp = fopen("./trajectory.txt","a");
+//		fprintf(fp,"%f\t%f\n", currentX, currentY);
+//		fclose(fp);
+//
+//		//printf ("round: %f %f %f %f\n", roundDec(3.33), roundDec(3.38), roundDec(-3.33), roundDec(-3.38));
+//
+//		setSpeeds((void *) msh);
+//	}
 
 	return 0;
 }
