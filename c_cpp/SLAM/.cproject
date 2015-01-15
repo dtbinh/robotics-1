@@ -21,6 +21,7 @@
 							<builder buildPath="${workspace_loc:/PhD}/Debug" id="cdt.managedbuild.target.gnu.builder.macosx.exe.debug.577998525" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.582721196" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.508377452" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
+								<option id="macosx.cpp.link.option.other.883378739" name="Other options (-Xlinker [option])" superClass="macosx.cpp.link.option.other" valueType="stringList"/>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1202030186" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -33,6 +34,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.exe.debug.1973959175" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.exe.debug">
 								<option id="gnu.cpp.compilermacosx.exe.debug.option.optimization.level.1511823202" name="Optimization Level" superClass="gnu.cpp.compilermacosx.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.1163715926" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.other.other.543609284" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1251137367" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.debug.1544273690" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.debug">
@@ -43,7 +45,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="newmat10|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="newmat10/example.cpp|newmat10/tmtm.cpp|newmat10/tmtl.cpp|newmat10/tmtk.cpp|newmat10/tmtj.cpp|newmat10/tmti.cpp|newmat10/tmth.cpp|newmat10/tmtg.cpp|newmat10/tmtf.cpp|newmat10/tmte.cpp|newmat10/tmtd.cpp|newmat10/tmtc.cpp|newmat10/tmtb.cpp|newmat10/tmta.cpp|newmat10/tmt9.cpp|newmat10/tmt8.cpp|newmat10/tmt7.cpp|newmat10/tmt6.cpp|newmat10/tmt5.cpp|newmat10/tmt4.cpp|newmat10/tmt3.cpp|newmat10/tmt2.cpp|newmat10/tmt1.cpp|newmat10/tmt.cpp|newmat10/sl_ex.cpp|newmat10/nl_ex.cpp|newmat10/garch.cpp|newmat10/test_exc.cpp|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Test"/>
 					</sourceEntries>
 				</configuration>
@@ -92,7 +94,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="newmat10|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="newmat10/example.cpp|newmat10/tmtm.cpp|newmat10/tmtl.cpp|newmat10/tmtk.cpp|newmat10/tmtj.cpp|newmat10/tmti.cpp|newmat10/tmth.cpp|newmat10/tmtg.cpp|newmat10/tmtf.cpp|newmat10/tmte.cpp|newmat10/tmtd.cpp|newmat10/tmtc.cpp|newmat10/tmtb.cpp|newmat10/tmta.cpp|newmat10/tmt9.cpp|newmat10/tmt8.cpp|newmat10/tmt7.cpp|newmat10/tmt6.cpp|newmat10/tmt5.cpp|newmat10/tmt4.cpp|newmat10/tmt3.cpp|newmat10/tmt2.cpp|newmat10/tmt1.cpp|newmat10/tmt.cpp|newmat10/sl_ex.cpp|newmat10/nl_ex.cpp|newmat10/garch.cpp|newmat10/test_exc.cpp|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Test"/>
 					</sourceEntries>
 				</configuration>
@@ -119,5 +121,12 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/SLAM"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/SLAM"/>
+		</configuration>
+	</storageModule>
 </cproject>

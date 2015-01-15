@@ -16,3 +16,5 @@ CDummyRobot::~CDummyRobot() {
 	// TODO Auto-generated destructor stub
 }
 
+void CDummyRobot::Read() {
+}

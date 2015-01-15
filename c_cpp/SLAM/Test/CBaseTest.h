@@ -15,7 +15,9 @@
 #include "../newmat10/include.h"            // or #include "newmat.h"
 #include "../newmat10/newmatap.h"
 #include "../newmat10/newmatio.h"
-
+#include "CDummyRobot.h"
+#include "CDummySonarProxy.h"
+#include "CDummyPosition2dProxy.h"
 
 struct locLines {
 	double r;

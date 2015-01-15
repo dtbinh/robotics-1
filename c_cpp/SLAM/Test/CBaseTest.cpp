@@ -678,7 +678,7 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 
 	robot.Read();
 
-	char *msh;
+	char msh[256];
 	double dT;
 
 	double matrXC[] = { currentX, currentY, currentAngle };
@@ -787,8 +787,8 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 			for (int i=0; i<16; i++) {
 				double d1, beta, oxr, oyr;
 
-				oxr = sp[i]*cos(dtor(sensPosition[i][2]))+(sensPosition[i][0]);
-				oyr = sp[i]*sin(dtor(sensPosition[i][2]))+sensPosition[i][1];
+				oxr = sp[i]*cos(dtor(sensPosition[i].Theta))+(sensPosition[i].Theta);
+				oyr = sp[i]*sin(dtor(sensPosition[i].Theta))+sensPosition[i].PosY;
 
 				d1 = sqrt(oxr*oxr+oyr*oyr);
 				beta = atan2(oyr,oxr);
@@ -802,13 +802,13 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 				{
 					double matrRC[] = { 1,0,currentX,0,1,currentY,0,0,1 };
 					double matrRY[] = { cos(currentAngle),-sin(currentAngle),0,sin(currentAngle),cos(currentAngle),0,0,0,1 };
-					double matrSC[] = { 1,0,sensPosition[i][0],0,1,sensPosition[i][1],0,0,1 };
+					double matrSC[] = { 1,0,sensPosition[i].PosX,0,1,sensPosition[i].PosY,0,0,1 };
 					double matrSY[] = {
-							cos(dtor(sensPosition[i][2])),
-							-sin(dtor(sensPosition[i][2])),
+							cos(dtor(sensPosition[i].Theta)),
+							-sin(dtor(sensPosition[i].Theta)),
 							0,
-							sin(dtor(sensPosition[i][2])),
-							cos(dtor(sensPosition[i][2])),
+							sin(dtor(sensPosition[i].Theta)),
+							cos(dtor(sensPosition[i].Theta)),
 							0,
 							0,
 							0,
@@ -865,13 +865,13 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 					adisp /= cntDisp;
 					adisp = normalize(adisp);
 				}
-				double xko = 0.5, yko = 0.5, ako = 5.0;
+//				double xko = 0.5, yko = 0.5, ako = 5.0;
 
 //------------------------------------------------------------------ correction
 
 				int llinNum[16];
 				int q=0;
-				int outLen = 0;
+//				int outLen = 0;
 				double matMZ[16][2];
 				for (int i=0; i<16; i++) {
 					if (linNum[i]!=0) {
@@ -965,8 +965,8 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 
 				double d1, beta, oxr, oyr;
 
-				oxr = sp[i]*cos(dtor(sensPosition[i][2]))+(sensPosition[i][0]);
-				oyr = sp[i]*sin(dtor(sensPosition[i][2]))+sensPosition[i][1];
+				oxr = sp[i]*cos(dtor(sensPosition[i].Theta))+(sensPosition[i].PosX);
+				oyr = sp[i]*sin(dtor(sensPosition[i].Theta))+sensPosition[i].PosY;
 
 				d1 = sqrt(oxr*oxr+oyr*oyr);
 				beta = atan2(oyr,oxr);
@@ -980,13 +980,13 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 				{
 					double matrRC[] = { 1,0,currentX,0,1,currentY,0,0,1 };
 					double matrRY[] = { cos(currentAngle),-sin(currentAngle),0,sin(currentAngle),cos(currentAngle),0,0,0,1 };
-					double matrSC[] = { 1,0,sensPosition[i][0],0,1,sensPosition[i][1],0,0,1 };
+					double matrSC[] = { 1,0,sensPosition[i].PosX,0,1,sensPosition[i].PosY,0,0,1 };
 					double matrSY[] = {
-							cos(dtor(sensPosition[i][2])),
-							-sin(dtor(sensPosition[i][2])),
+							cos(dtor(sensPosition[i].Theta)),
+							-sin(dtor(sensPosition[i].Theta)),
 							0,
-							sin(dtor(sensPosition[i][2])),
-							cos(dtor(sensPosition[i][2])),
+							sin(dtor(sensPosition[i].Theta)),
+							cos(dtor(sensPosition[i].Theta)),
 							0,
 							0,
 							0,
@@ -1014,7 +1014,7 @@ int CBaseTest::runTask(int argc, char* argv[]) {
 				//obY = currentY + (sp[i] + sD)*sin(dtor(sensPosition[i][2])+currentAngle);
 				dx[i] = 0;
 				dy[i] = 0;
-				da[i] = normalize(dtor(sensPosition[i][2]+90));
+				da[i] = normalize(dtor(sensPosition[i].Theta+90));
 
 				if (sp[i] < maxSonarVal) {
 					if(!addPoint(roundDec(obX), roundDec(obY), dx[i], dy[i], da[i], false, i)) {
