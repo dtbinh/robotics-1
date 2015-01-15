@@ -37,8 +37,7 @@ CFileWriter::~CFileWriter()
 	instanceFlag = false;
 }
 
-void CFileWriter::WritePointListToFile(std::list<pts>* pList, char* cFileName) {
-	pts points;
+void CFileWriter::WritePointListToFile(std::list<pts>* pList, const char* cFileName) {
 	std::list<pts>::iterator pI;
 	FILE *fp = NULL;
 

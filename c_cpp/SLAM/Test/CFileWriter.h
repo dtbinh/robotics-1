@@ -30,7 +30,7 @@ public:
     static CFileWriter* getInstance();
 	virtual ~CFileWriter();
 
-	void WritePointListToFile(std::list<pts>* pList, char* cFileName);
+	void WritePointListToFile(std::list<pts>* pList, const char* cFileName);
 
 };
 

@@ -25,7 +25,6 @@ CBaseTest::~CBaseTest() {
 int CBaseTest::addPoint(double x, double y, double z) {
 
 	pts points;
-	lns lin1;
 	std::list<pts>::iterator pI;
 	std::list<pts>::iterator pN;
 	std::list<lns>::iterator pL;
@@ -64,7 +63,6 @@ int CBaseTest::addPoint(double x, double y, double z) {
 		}
 	}
 
-	double px=0, py=0;
 	if (findIntersection(x, y, dx, dy, da, num)) {
 		return false;
 	}
@@ -170,7 +168,6 @@ double CBaseTest::getDeltaTime(double *dPrevTime) {
 }
 
 void CBaseTest::WritePointListToFile(std::list<pts>* pList, char* cFileName) {
-	pts points;
 	std::list<pts>::iterator pI;
 	FILE *fp = NULL;
 
@@ -201,7 +198,7 @@ bool CBaseTest::findIntersection(double dPointX, double dPointY, double dx,
 	std::list<lns>::iterator pL;
 	//double px, py;
 
-	double cx[2], cy[2], cth, cdist, a, c, tmp, fi;
+	double cx[2], cy[2], cth, cdist, a, c, tmp;
 
 	cx[0] = currentX;
 	cy[0] = currentY;
