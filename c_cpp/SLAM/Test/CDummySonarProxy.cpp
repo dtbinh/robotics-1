@@ -16,3 +16,7 @@ CDummySonarProxy::~CDummySonarProxy() {
 	// TODO Auto-generated destructor stub
 }
 
+double CDummySonarProxy::GetScan(int lNumber) {
+	//TODO implement me
+	return 0.0;
+}

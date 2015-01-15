@@ -12,6 +12,9 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include "CFileWriter.h"
+#include "../newmat10/include.h"            // or #include "newmat.h"
+#include "../newmat10/newmatap.h"
+#include "../newmat10/newmatio.h"
 
 
 struct locLines {
@@ -55,6 +58,9 @@ private:
 	std::list<pts> lPoints;
 
 	CFileWriter* FileWriter;
+	CDummyRobot robot;
+	CDummyPosition2dProxy pp;
+	CDummySonarProxy* sp1;
 
 	sSensor sensPosition[16];
 
@@ -74,6 +80,13 @@ private:
 	double sp[32];
 	std::list<pts> lTpts;
 	double minDistance;
+	double currentV;
+	double currentW;
+
+	// Probably local for main()
+	double obstacleX[16], obstacleY[16];
+	double prevX, prevY, prevAngle, prevV, prevW;
+
 public:
 	CBaseTest();
 	virtual ~CBaseTest();

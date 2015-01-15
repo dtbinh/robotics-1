@@ -14,6 +14,10 @@ class CDummyPosition2dProxy {
 public:
 	CDummyPosition2dProxy();
 	virtual ~CDummyPosition2dProxy();
+
+	double GetXSpeed();
+	double GetYSpeed();
+	double GetYawSpeed();
 };
 
 #endif /* CDUMMYPOSITION2DPROXY_H_ */

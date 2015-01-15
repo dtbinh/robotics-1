@@ -14,6 +14,8 @@ class CDummySonarProxy {
 public:
 	CDummySonarProxy();
 	virtual ~CDummySonarProxy();
+
+	double GetScan(int lNumber);
 };
 
 #endif /* CDUMMYSONARPROXY_H_ */

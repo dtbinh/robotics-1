@@ -16,6 +16,8 @@ class CDummyRobot {
 public:
 	CDummyRobot();
 	virtual ~CDummyRobot();
+
+	void Read();
 };
 
 #endif /* CDUMMYROBOT_H_ */
