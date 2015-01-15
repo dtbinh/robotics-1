@@ -62,3 +62,19 @@ CFileWriter* CFileWriter::getInstance() {
         return instance;
     }
 }
+
+void CFileWriter::WriteLineListToFile(std::list<lns>* pList,
+		const char* cFileName)
+{
+	std::list<lns>::iterator pI;
+	FILE *fp = NULL;
+
+	if ( ( NULL != cFileName ) && (NULL != pList) )
+	{
+		fp = fopen(cFileName,"w+");
+		for (pI = pList->begin(); pI != pList->end(); ++pI) {
+			fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\n", pI->th, pI->r, pI->x[0], pI->y[0], pI->x[1], pI->y[1]);
+		}
+		fclose(fp);
+	}
+}

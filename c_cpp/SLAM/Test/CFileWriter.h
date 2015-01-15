@@ -31,7 +31,7 @@ public:
 	virtual ~CFileWriter();
 
 	void WritePointListToFile(std::list<pts>* pList, const char* cFileName);
-
+	void WriteLineListToFile(std::list<lns>* pList, const char* cFileName);
 };
 
 #endif /* CFILEWRITER_H_ */

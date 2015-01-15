@@ -18,6 +18,7 @@ CBaseTest::CBaseTest() {
 	px = py = pa = 0;
 	num = 0;
 	maxSonarVal = 1.2;
+	minDistance = 0.3;
 
 	sensPosition[0] 	= (tSensor) { 0.075, 0.130, 0, 90 };
 	sensPosition[1] 	= (tSensor) { 0.115, 0.115, 0, 50 };
@@ -405,7 +406,6 @@ void CBaseTest::findLocalLines() {
 
 void CBaseTest::findNewLines() {
 	std::list<pts>::iterator pI;
-	lns lin1;
 	pts tpt;
 	double cth, cdist, x, y, error = 2;
 	int iterrations = 200;
@@ -577,13 +577,14 @@ void CBaseTest::chkDist(int& num, std::list<pts>::iterator pN, double x,
 }
 
 void CBaseTest::writeLnsToFile() {
-	lns points;
-	std::list<lns>::iterator pI;
+//	lns points;
+//	std::list<lns>::iterator pI;
 	//lLines.sort();
 	//lLines.reverse();
-	FILE *fp = fopen("./lines.txt","w+");
-	for (pI = lLines.begin(); pI != lLines.end(); ++pI) {
-		fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\n", pI->th, pI->r, pI->x[0], pI->y[0], pI->x[1], pI->y[1]);
-	}
-	fclose(fp);
+//	FILE *fp = fopen("./lines.txt","w+");
+//	for (pI = lLines.begin(); pI != lLines.end(); ++pI) {
+//		fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\n", pI->th, pI->r, pI->x[0], pI->y[0], pI->x[1], pI->y[1]);
+//	}
+//	fclose(fp);
+	FileWriter->WriteLineListToFile(&lLines, "./lines.txt");
 }
