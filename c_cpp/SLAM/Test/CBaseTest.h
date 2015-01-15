@@ -25,7 +25,7 @@ struct locLines {
 typedef struct sSensor {
 	double PosX;
 	double PosY;
-//	double PosZ = 0;
+	double PosZ;
 	double Theta;
 }tSensor;
 
@@ -56,6 +56,8 @@ private:
 
 	CFileWriter* FileWriter;
 
+	sSensor sensPosition[16];
+
 
 	// Temporary variables
 	double minErr;
@@ -68,11 +70,13 @@ private:
 	int linNum[16];
 	double mMZ[32];
 	int num;
+	double maxSonarVal;
+	double sp[32];
+	std::list<pts> lTpts;
+	double minDistance;
 public:
 	CBaseTest();
 	virtual ~CBaseTest();
-
-	void WritePointListToFile(std::list<pts>* pList, char* cFileName);
 
 
 	// Not optimized
@@ -86,8 +90,15 @@ public:
 	void getNewEdges(double& dStartX, double& dStartY, double& dEndX, double& dEndY, double lx, double ly);
 	bool findIntersection(double dPointX, double dPointY, double dx, double dy, double da, int num);
 	void writePtsToFile();
+	void findLocalLines();
+	void findNewLines ();
+	void tllsq(double cx[], double cy[], double &cth, double &cdist);
+	bool getInlier(double &cth, double &cdist);
+	void chkDist(int &num, std::list<pts>::iterator pN, double x, double y);
+	void writeLnsToFile();
 
-	// Temporary methods
+	// Temporary empty methods
+	bool findLineSegment(double cth, double cdist);
 
 };
 
