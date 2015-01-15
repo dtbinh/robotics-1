@@ -80,7 +80,7 @@ public:
 
 
 	// Not optimized
-	int addPoint(double x, double y, double z);
+	int addPoint(double x, double y, double &dx, double &dy, double &da, bool flagPredict, int num);
 	bool isInSegment(lns segment, pts point);
 
 	double getDeltaTime(double *dPrevTime);
@@ -96,9 +96,13 @@ public:
 	bool getInlier(double &cth, double &cdist);
 	void chkDist(int &num, std::list<pts>::iterator pN, double x, double y);
 	void writeLnsToFile();
+	bool isToSegment(double x1, double y1, double x2, double y2, double lx, double ly);
+	void setSpeeds(void *ptr);
+	double roundDec(double num);
 
 	// Temporary empty methods
 	bool findLineSegment(double cth, double cdist);
+	int runTask(int argc, char *argv[]);
 
 };
 
