@@ -161,7 +161,7 @@ int CBaseTest::addPoint(double x, double y, double &dx, double &dy, double &da, 
 	}
 
 	// Debug output
-	printf("Adding point with coordinates: x=%f, y=%f, z=%f\n", x, y, 0.0);
+	printf("Adding point with coordinates: x=%f, y=%f, th=%f\n", x, y, 0.0);
 
 	return flagInsert||flagLine;
 }
@@ -211,15 +211,8 @@ double CBaseTest::getDeltaTime(double *dPrevTime) {
 	return diff;
 }
 
-void CBaseTest::writePtsToFile() {
-//	pts points;
-//	std::list<pts>::iterator pI;
-//	FILE *fp = fopen("./points.txt","w+");
-//	for (pI = lPoints.begin(); pI != lPoints.end(); ++pI) {
-//		fprintf(fp,"%f\t%f\n", pI->x, pI->y);
-//	}
-//	fclose(fp);
-
+void CBaseTest::writePtsToFile()
+{
 	FileWriter->WritePointListToFile(&lPoints, "./points.txt");
 }
 
@@ -261,13 +254,6 @@ bool CBaseTest::findIntersection(double dPointX, double dPointY, double dx,
 	}
 	if (lLines.size() > 0) {
 		for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
-			/*px = ((pL->x[0]*pL->y[1]-pL->y[0]*pL->x[1])*(currentX-x) -
-				(pL->x[0]-pL->x[1])*(currentX*y-currentY*x))/
-				((pL->x[0]-pL->x[1])*(currentY-y)-(pL->y[0]-pL->y[1])*(currentX-y));
-
-			py = ((pL->x[0]*pL->y[1]-pL->y[0]*pL->x[1])*(currentY-y) -
-				(pL->y[0]-pL->y[1])*(currentX*y-currentY*x))/
-				((pL->x[0]-pL->x[1])*(currentY-y)-(pL->y[0]-pL->y[1])*(currentX-y));*/
 			bool flagParallel = false;
 			o++;
 			if ( abs(sin(cth-pL->th)) > abs(sin(pL->th-cth)) ) {
@@ -288,15 +274,11 @@ bool CBaseTest::findIntersection(double dPointX, double dPointY, double dx,
 				else
 					px = ( pL->r - py*sin(pL->th) )/cos(pL->th);
 			}
-			//			printf("x: %f y: %f\n", px, py);
 			if ( (!flagParallel) &&
 					(isInSegment(pL->x[0], pL->y[0], pL->x[1], pL->y[1], px, py)) &&
 					(isInSegment(currentX, currentY, dPointX, dPointX, px, py))
 					)
 			{
-				//fi = normalize(pL->th - cth);
-				//double ralpha = dtor(90) - fi - pa + pL->th;
-				//pa = normalize(ralpha - currentAngle);
 				FILE *fp = fopen("./scan_err.txt","a");
 				fprintf(fp,"%f\t%f\n", px, py);
 				fclose(fp);
@@ -307,7 +289,6 @@ bool CBaseTest::findIntersection(double dPointX, double dPointY, double dx,
 					py = d*sin(pL->th);
 					pa = normalize(localLines[num].th + currentAngle - pL->th);
 					linNum[num] = o;
-					//if (abs(pa) > dtor(15)) { pa = 0.0; }
 					printf("pa: %f px: %f py: %f\n", rtod(pa), px, py);
 				} else {
 					pa = 0;
@@ -369,7 +350,6 @@ void CBaseTest::llsq(int n, double cx[], double cy[], double& a, double& b) {
 }
 
 void CBaseTest::findLocalLines() {
-	//list<lns>::iterator lI;
 	double x[2], y[2], cth, cdist;
 
 	for (int i = 0; i<15; i++) {
@@ -389,8 +369,6 @@ void CBaseTest::findLocalLines() {
 			localLines[i].r = 0;
 			localLines[i].th = 0;
 		}
-		//printf("dist: %f th: %f\n", localLines[i].r, localLines[i].th);
-
 	}
 	if ((sp[15]<maxSonarVal)&&(sp[0]<maxSonarVal)) {
 		x[0] = sp[15]*cos(dtor(sensPosition[15].Theta))+sensPosition[15].PosX;
@@ -429,16 +407,9 @@ void CBaseTest::findNewLines() {
 			} else {
 				pI++;
 			}
-			//printf("lp: %d\n", lPoints.size());
 		} while ((pI != lPoints.end())&&(!lPoints.empty()));
-
-		//printf("here\n");
 		if (lTpts.size() > 25) {
 			findLineSegment(cth, cdist);
-			//lin1.th = cth;
-			//lin1.r = cdist;
-			//lLines.push_back(lin1);
-			//writeLnsToFile();
 		}
 		if (lTpts.size() > 0) {
 			lPoints.splice(lPoints.begin(), lTpts);
@@ -480,17 +451,10 @@ bool CBaseTest::getInlier(double& cth, double& cdist) {
 		lTpts.clear();
 
 	n = rand() % lPoints.size();
-	//do {
-
-	//} while (n[0]==n[1]);
 	pI = lPoints.begin();
 	advance (pI, n);
-//	for (int i=0; i<=n[0]; i++)
-	//	pI++;
-	//pI = n[0] + lPoints.begin();
 	x[0] = pI->x;
 	y[0] = pI->y;
-	//lTpts.splice (lTpts.begin(), lPoints, pI);
 	tpt.x = pI->x;
 	tpt.y = pI->y;
 	lTpts.push_back(tpt);
@@ -499,12 +463,8 @@ bool CBaseTest::getInlier(double& cth, double& cdist) {
 	n = rand() % lPoints.size();
 	pI = lPoints.begin();
 	advance (pI, n);
-	//for (int i=0; i<=n[1]; i++)
-		//pI++;
-	//pI = n[1] + lPoints.begin();
 	x[1] = pI->x;
 	y[1] = pI->y;
-	//lTpts.splice (lTpts.begin()+1, lPoints, pI);
 	tpt.x = pI->x;
 	tpt.y = pI->y;
 	lTpts.push_back(tpt);
@@ -535,24 +495,18 @@ bool CBaseTest::isToSegment(double x1, double y1, double x2, double y2,
 	double d[2];
 	d[0] = sqrt((x2-lx)*(x2-lx)+(y2-ly)*(y2-ly));
 	d[1] = sqrt((x1-lx)*(x1-lx)+(y1-ly)*(y1-ly));
-	//printf("d1: %f d2: %f\n", d[0], d[1]);
 	if (isInSegment(x1, y1, x2, y2, lx, ly))
 		return true;
 	return ((d[0] < minDistance)||(d[1] < minDistance));
 }
 
 void CBaseTest::setSpeeds(void* ptr) {
-    //while (true) {
     struct timespec timeOut,remains;
 
     timeOut.tv_sec = 0;
     timeOut.tv_nsec = 200000000;
 
     nanosleep(&timeOut, &remains);
-
-    //sleep(1);
-    //pp.SetSpeed(speed, turnrate);
-    //}
 }
 
 double CBaseTest::roundDec(double num) {
@@ -618,9 +572,8 @@ void CBaseTest::writeLnsToFile() {
 	FileWriter->WriteLineListToFile(&lLines, "./lines.txt");
 }
 
-int CBaseTest::runTask(int argc, char* argv[]) {
-
-	int scCycle = 0;
+int CBaseTest::runTask(int argc, char* argv[])
+{
 
 //	Already done with initialization of CFileWriter
 //	sprintf(filename, "./map.txt");
