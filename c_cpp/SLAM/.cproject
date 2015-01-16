@@ -21,7 +21,13 @@
 							<builder buildPath="${workspace_loc:/PhD}/Debug" id="cdt.managedbuild.target.gnu.builder.macosx.exe.debug.577998525" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.582721196" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.508377452" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
-								<option id="macosx.cpp.link.option.other.883378739" name="Other options (-Xlinker [option])" superClass="macosx.cpp.link.option.other" valueType="stringList"/>
+								<option id="macosx.cpp.link.option.other.883378739" name="Other options (-Xlinker [option])" superClass="macosx.cpp.link.option.other"/>
+								<option id="macosx.cpp.link.option.libs.1031611599" superClass="macosx.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="remoteApi"/>
+								</option>
+								<option id="macosx.cpp.link.option.paths.1362266443" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/Applications/V-REP/programming/remoteApiBindings/lib/lib/"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1202030186" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -35,7 +41,7 @@
 								<option id="gnu.cpp.compilermacosx.exe.debug.option.optimization.level.1511823202" name="Optimization Level" superClass="gnu.cpp.compilermacosx.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.1163715926" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.543609284" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.859003244" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.859003244" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1007836249" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/Applications/V-REP/programming/remoteApi/"/>
 									<listOptionValue builtIn="false" value="/Applications/V-REP/programming/include/"/>

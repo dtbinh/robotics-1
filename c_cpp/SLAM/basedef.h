@@ -15,8 +15,13 @@
 #define NON_MATLAB_PARSING
 #define MAX_EXT_API_CONNECTIONS 255
 
-#include <extApi.h>
-#include <extApiCustom.h>
+extern "C" {
+    #include <extApi.h>
+	#include <extApiCustom.h>
+}
+//
+//#include <extApi.h>
+//#include <extApiCustom.h>
 
 #define PI 				(double) (std::atan(1) * 4)
 #define rtod(deg)  		(double) ((deg) * PI / 180)
