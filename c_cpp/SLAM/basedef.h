@@ -12,11 +12,16 @@
 #include <cmath>
 #include <list>
 
+#define NON_MATLAB_PARSING
+#define MAX_EXT_API_CONNECTIONS 255
+
+#include <extApi.h>
+#include <extApiCustom.h>
+
 #define PI 				(double) (std::atan(1) * 4)
 #define rtod(deg)  		(double) ((deg) * PI / 180)
 #define dtor(rad)  		(double) ((rad) * 180 / PI)
 #define sign(number) 	(number >= 0)
-
 
 
 class pts {
