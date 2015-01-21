@@ -12,13 +12,11 @@
 #include <cmath>
 #include <list>
 
-#define NON_MATLAB_PARSING
-#define MAX_EXT_API_CONNECTIONS 255
-
-extern "C" {
-    #include <extApi.h>
-	#include <extApiCustom.h>
-}
+//extern "C" {
+//    #include "vrep/extApi.h"
+////	#include "vrep/extApiCustom.h"
+//	#include "vrep/extApiPlatform.h"
+//}
 //
 //#include <extApi.h>
 //#include <extApiCustom.h>

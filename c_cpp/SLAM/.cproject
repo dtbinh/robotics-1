@@ -22,12 +22,10 @@
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.582721196" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.508377452" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
 								<option id="macosx.cpp.link.option.other.883378739" name="Other options (-Xlinker [option])" superClass="macosx.cpp.link.option.other"/>
-								<option id="macosx.cpp.link.option.libs.1031611599" superClass="macosx.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="remoteApi"/>
-								</option>
-								<option id="macosx.cpp.link.option.paths.1362266443" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/Applications/V-REP/programming/remoteApiBindings/lib/lib/"/>
-								</option>
+								<option id="macosx.cpp.link.option.libs.1031611599" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs"/>
+								<option id="macosx.cpp.link.option.paths.1362266443" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths"/>
+								<option id="macosx.cpp.link.option.shared.656753985" name="Shared (-dynamiclib)" superClass="macosx.cpp.link.option.shared" value="false" valueType="boolean"/>
+								<option id="macosx.cpp.link.option.userobjs.741815636" name="Other objects" superClass="macosx.cpp.link.option.userobjs"/>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1202030186" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -42,21 +40,20 @@
 								<option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.1163715926" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.543609284" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.859003244" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def"/>
-								<option id="gnu.cpp.compiler.option.include.paths.1007836249" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/Applications/V-REP/programming/remoteApi/"/>
-									<listOptionValue builtIn="false" value="/Applications/V-REP/programming/include/"/>
-								</option>
+								<option id="gnu.cpp.compiler.option.include.paths.1007836249" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1251137367" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.debug.1544273690" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.exe.debug">
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.macosx.exe.debug.option.optimization.level.1769280637" name="Optimization Level" superClass="gnu.c.compiler.macosx.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.macosx.exe.debug.option.debugging.level.1187070959" name="Debug Level" superClass="gnu.c.compiler.macosx.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.include.paths.1321234260" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath"/>
+								<option id="gnu.c.compiler.option.include.files.885455745" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" valueType="includeFiles"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1852909734" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="newmat10/example.cpp|newmat10/tmtm.cpp|newmat10/tmtl.cpp|newmat10/tmtk.cpp|newmat10/tmtj.cpp|newmat10/tmti.cpp|newmat10/tmth.cpp|newmat10/tmtg.cpp|newmat10/tmtf.cpp|newmat10/tmte.cpp|newmat10/tmtd.cpp|newmat10/tmtc.cpp|newmat10/tmtb.cpp|newmat10/tmta.cpp|newmat10/tmt9.cpp|newmat10/tmt8.cpp|newmat10/tmt7.cpp|newmat10/tmt6.cpp|newmat10/tmt5.cpp|newmat10/tmt4.cpp|newmat10/tmt3.cpp|newmat10/tmt2.cpp|newmat10/tmt1.cpp|newmat10/tmt.cpp|newmat10/sl_ex.cpp|newmat10/nl_ex.cpp|newmat10/garch.cpp|newmat10/test_exc.cpp|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="vrep/extApiCustom.c|newmat10/example.cpp|newmat10/tmtm.cpp|newmat10/tmtl.cpp|newmat10/tmtk.cpp|newmat10/tmtj.cpp|newmat10/tmti.cpp|newmat10/tmth.cpp|newmat10/tmtg.cpp|newmat10/tmtf.cpp|newmat10/tmte.cpp|newmat10/tmtd.cpp|newmat10/tmtc.cpp|newmat10/tmtb.cpp|newmat10/tmta.cpp|newmat10/tmt9.cpp|newmat10/tmt8.cpp|newmat10/tmt7.cpp|newmat10/tmt6.cpp|newmat10/tmt5.cpp|newmat10/tmt4.cpp|newmat10/tmt3.cpp|newmat10/tmt2.cpp|newmat10/tmt1.cpp|newmat10/tmt.cpp|newmat10/sl_ex.cpp|newmat10/nl_ex.cpp|newmat10/garch.cpp|newmat10/test_exc.cpp|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Test"/>
 					</sourceEntries>
 				</configuration>
@@ -105,7 +102,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="newmat10/example.cpp|newmat10/tmtm.cpp|newmat10/tmtl.cpp|newmat10/tmtk.cpp|newmat10/tmtj.cpp|newmat10/tmti.cpp|newmat10/tmth.cpp|newmat10/tmtg.cpp|newmat10/tmtf.cpp|newmat10/tmte.cpp|newmat10/tmtd.cpp|newmat10/tmtc.cpp|newmat10/tmtb.cpp|newmat10/tmta.cpp|newmat10/tmt9.cpp|newmat10/tmt8.cpp|newmat10/tmt7.cpp|newmat10/tmt6.cpp|newmat10/tmt5.cpp|newmat10/tmt4.cpp|newmat10/tmt3.cpp|newmat10/tmt2.cpp|newmat10/tmt1.cpp|newmat10/tmt.cpp|newmat10/sl_ex.cpp|newmat10/nl_ex.cpp|newmat10/garch.cpp|newmat10/test_exc.cpp|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="vrep/extApiCustom.c|newmat10/example.cpp|newmat10/tmtm.cpp|newmat10/tmtl.cpp|newmat10/tmtk.cpp|newmat10/tmtj.cpp|newmat10/tmti.cpp|newmat10/tmth.cpp|newmat10/tmtg.cpp|newmat10/tmtf.cpp|newmat10/tmte.cpp|newmat10/tmtd.cpp|newmat10/tmtc.cpp|newmat10/tmtb.cpp|newmat10/tmta.cpp|newmat10/tmt9.cpp|newmat10/tmt8.cpp|newmat10/tmt7.cpp|newmat10/tmt6.cpp|newmat10/tmt5.cpp|newmat10/tmt4.cpp|newmat10/tmt3.cpp|newmat10/tmt2.cpp|newmat10/tmt1.cpp|newmat10/tmt.cpp|newmat10/sl_ex.cpp|newmat10/nl_ex.cpp|newmat10/garch.cpp|newmat10/test_exc.cpp|Test" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Test"/>
 					</sourceEntries>
 				</configuration>
