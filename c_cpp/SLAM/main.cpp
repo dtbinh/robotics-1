@@ -9,6 +9,7 @@
 #include "Test/CBaseTest.h"
 #include "Test/CFileWriter.h"
 #include "basedef.h"
+#include <windows.h>
 //
 //extern "C"
 //{
@@ -28,26 +29,26 @@ int main(void)
 	dTime = cb.getDeltaTime(&prevTime);
 
 //	printf("Delta time: %f\n", dTime);
-//
-////	cb.runTask(NULL, NULL);
-//
-//	simxInt portNb = 99999;
-//
-////	simLoadModule("remoteApi.dylib", "/Applications/V-REP/programming/remoteApiBindings/lib/lib/");
-//
-//	int clientID=simxStart((simxChar*)"127.0.0.1",portNb,true,true,2000,5);
-//	if (clientID!=-1)
-//	{
-//
-//		while (simxGetConnectionId(clientID)!=-1)
-//		{
-//			simxInt leftMotorHandle = 0;
-//			simxGetObjectHandle(clientID, "Pioneer_p3dx_leftMotor", &leftMotorHandle, simx_opmode_oneshot);
-//			simxSetJointTargetVelocity(clientID, leftMotorHandle, 0.0, simx_opmode_oneshot);
+
+//	cb.runTask(NULL, NULL);
+
+	simxInt portNb = 19999;
+
+
+	int clientID=simxStart((simxChar*)"127.0.0.1",portNb,true,true,2000,5);
+	if (clientID!=-1)
+	{
+
+		while (simxGetConnectionId(clientID)!=-1)
+		{
+			simxInt leftMotorHandle = 0;
+			simxGetObjectHandle(clientID, "Pioneer_p3dx_leftMotor", &leftMotorHandle, simx_opmode_oneshot);
+			simxSetJointTargetVelocity(clientID, leftMotorHandle, 0.4, simx_opmode_oneshot);
+			Sleep(1);
 //			extApi_sleepMs(5);
-//		}
-//		simxFinish(clientID);
-//	}
+		}
+		simxFinish(clientID);
+	}
 
 	delete FileWriter;
 

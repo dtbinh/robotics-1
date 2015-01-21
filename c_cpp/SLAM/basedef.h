@@ -11,13 +11,18 @@
 #include <iostream>
 #include <cmath>
 #include <list>
+#ifdef __WIN32__
+#include <stdio.h>
+#endif
 
-//extern "C" {
-//    #include "vrep/extApi.h"
-////	#include "vrep/extApiCustom.h"
-//	#include "vrep/extApiPlatform.h"
-//}
-//
+#define MAX_EXT_API_CONNECTIONS 255
+
+extern "C" {
+    #include "extApi.h"
+	#include "extApiCustom.h"
+	#include "extApiPlatform.h"
+}
+
 //#include <extApi.h>
 //#include <extApiCustom.h>
 

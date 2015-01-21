@@ -498,12 +498,12 @@ bool CBaseTest::isToSegment(double x1, double y1, double x2, double y2,
 }
 
 void CBaseTest::setSpeeds(void* ptr) {
-    struct timespec timeOut,remains;
+//    struct timespec timeOut,remains;
+//
+//    timeOut.tv_sec = 0;
+//    timeOut.tv_nsec = 200000000;
 
-    timeOut.tv_sec = 0;
-    timeOut.tv_nsec = 200000000;
-
-    nanosleep(&timeOut, &remains);
+//    nanosleep(&timeOut, &remains);
 }
 
 double CBaseTest::roundDec(double num) {
