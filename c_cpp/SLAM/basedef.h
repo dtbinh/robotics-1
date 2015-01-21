@@ -15,13 +15,12 @@
 #include <stdio.h>
 #endif
 
-#define MAX_EXT_API_CONNECTIONS 255
 
-extern "C" {
-    #include "extApi.h"
-	#include "extApiCustom.h"
-	#include "extApiPlatform.h"
-}
+//extern "C" {
+//    #include "extApi.h"
+//	#include "extApiCustom.h"
+//	#include "extApiPlatform.h"
+//}
 
 //#include <extApi.h>
 //#include <extApiCustom.h>
