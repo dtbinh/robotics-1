@@ -15,7 +15,8 @@ void CDummySonarProxy::Call() {
 	simxUChar poin;
 	simxFloat vector[3], pos[3];
 	simxInt clientId = pRobot->getClientId();
-	char data[1024] = "Distances: ";
+	char data[1024] = "Distances:";
+//	printf("Reading sensors\n");
 	for (int cnt=0; cnt<16; cnt++)
 	{
 		simxReadProximitySensor(clientId, SensorHandles[cnt], &poin, pos, NULL, vector, simx_opmode_oneshot_wait);

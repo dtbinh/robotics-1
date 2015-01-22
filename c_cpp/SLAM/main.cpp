@@ -30,14 +30,15 @@ int main(void)
 
 //	CDummyRobot robot("127.0.0.1");
 //	CDummySonarProxy sp(&robot);
-//
+////
 //	for (int ii=0; ii<=10; ++ii)
 //	{
 //		robot.Read();
-//		Sleep(100);
+//		extApi_sleepMs(5);
+////		Sleep(100);
 //	}
 
-//	delete FileWriter;
+	delete FileWriter;
 
 	return 0;
 }

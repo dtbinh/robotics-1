@@ -16,12 +16,10 @@
 #include <string>
 #include "CDummyClientProxy.h"
 
-#define MAX_EXT_API_CONNECTIONS 255
-
 extern "C" {
-    #include "extApi.h"
-	#include "extApiCustom.h"
-	#include "extApiPlatform.h"
+    #include "../vrep/extApi.h"
+	#include "../vrep/extApiCustom.h"
+	#include "../vrep/extApiPlatform.h"
 }
 
 class CDummyClientProxy;
