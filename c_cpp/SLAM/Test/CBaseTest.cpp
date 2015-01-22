@@ -10,7 +10,7 @@
 
 CBaseTest::CBaseTest() {
 	FileWriter = CFileWriter::getInstance();
-	sp1 = new CDummySonarProxy();
+	sp1 = new CDummySonarProxy(&robot);
 
 	minErr = 0.2;
 	flagPredict = false;
@@ -626,7 +626,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 	Matrix MZ(32, 1);
 	Matrix MM(32, 1);
 
-//	robot.Read();
+	robot.Read();
 
 	char msh[256];
 	double dT;
@@ -638,7 +638,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 
 	for(;;)
   	{
-//    	robot.Read();
+    	robot.Read();
 		dT = getDeltaTime(&dT);
 		currentV = sqrt(pp.GetXSpeed()*pp.GetXSpeed() + pp.GetYSpeed()*pp.GetYSpeed());
 		currentW = pp.GetYawSpeed();

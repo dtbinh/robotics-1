@@ -15,16 +15,6 @@
 #include <stdio.h>
 #endif
 
-
-//extern "C" {
-//    #include "extApi.h"
-//	#include "extApiCustom.h"
-//	#include "extApiPlatform.h"
-//}
-
-//#include <extApi.h>
-//#include <extApiCustom.h>
-
 #define PI 				(double) (std::atan(1) * 4)
 #define rtod(deg)  		(double) ((deg) * PI / 180)
 #define dtor(rad)  		(double) ((rad) * 180 / PI)

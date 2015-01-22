@@ -60,7 +60,7 @@ private:
 	std::list<pts> lPoints;
 
 	CFileWriter* FileWriter;
-//	CDummyRobot robot;
+	CDummyRobot robot;
 	CDummyPosition2dProxy pp;
 	CDummySonarProxy* sp1;
 
