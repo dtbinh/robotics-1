@@ -61,7 +61,7 @@ private:
 
 	CFileWriter* FileWriter;
 	CDummyRobot robot;
-	CDummyPosition2dProxy pp;
+	CDummyPosition2dProxy* pp;
 	CDummySonarProxy* sp1;
 
 	sSensor sensPosition[16];

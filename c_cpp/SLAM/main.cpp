@@ -17,26 +17,26 @@ int main(void)
 {
 	std::list<pts> lPoints;
 	CFileWriter* FileWriter = CFileWriter::getInstance();
-	CBaseTest cb;
+//	CBaseTest cb;
+//
+//	double prevTime = 0, dTime = 0;
+//
+//	cb.getDeltaTime(&prevTime);
+//	dTime = cb.getDeltaTime(&prevTime);
+//
+//	printf("Delta time: %f\n", dTime);
 
-	double prevTime = 0, dTime = 0;
+//	cb.runTask(NULL, NULL);
 
-	cb.getDeltaTime(&prevTime);
-	dTime = cb.getDeltaTime(&prevTime);
+	CDummyRobot robot("127.0.0.1");
+	CDummySonarProxy sp(&robot);
+	CDummyPosition2dProxy pp(&robot);
 
-	printf("Delta time: %f\n", dTime);
-
-	cb.runTask(NULL, NULL);
-
-//	CDummyRobot robot("127.0.0.1");
-//	CDummySonarProxy sp(&robot);
-////
-//	for (int ii=0; ii<=10; ++ii)
-//	{
-//		robot.Read();
-//		extApi_sleepMs(5);
-////		Sleep(100);
-//	}
+	for (int ii=0; ii<=10; ++ii)
+	{
+		robot.Read();
+		extApi_sleepMs(5);
+	}
 
 	delete FileWriter;
 
