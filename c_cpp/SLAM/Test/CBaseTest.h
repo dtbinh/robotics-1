@@ -9,6 +9,7 @@
 #define CBASETEST_H_
 
 #include "../basedef.h"
+#include "../basefcn.h"
 #include <stdio.h>
 #include <sys/time.h>
 #include "CFileWriter.h"
@@ -98,7 +99,6 @@ public:
 	int addPoint(double x, double y, double &dx, double &dy, double &da, bool flagPredict, int num);
 	bool isInSegment(lns segment, pts point);
 
-	double getDeltaTime(double *dPrevTime);
 	double normalize(double dAngleRad);
 	void llsq (int n, double cx[], double cy[], double &a, double &b);
 	bool isInSegment(double dStartX, double dStartY, double dEndX, double dEndY, double lx, double ly);
@@ -118,6 +118,7 @@ public:
 	// Temporary empty methods
 	bool findLineSegment(double cth, double cdist);
 	int runTask(int argc, char *argv[]);
+	int runSLAM();
 
 };
 

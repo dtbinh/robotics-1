@@ -25,7 +25,10 @@ private:
 	simxInt LeftMotorHandle;
 	simxInt RightMotorHandle;
 
-	double GetJointSpeed(const char *cJountName);
+	/// xxx
+	unsigned char* cSignal;
+	simxInt sLength;
+
 public:
 	CDummyPosition2dProxy(CDummyRobot* pRobot);
 	virtual ~CDummyPosition2dProxy();

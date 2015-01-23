@@ -21,6 +21,12 @@
 #define sign(number) 	(number >= 0)
 
 
+typedef struct sSensorData
+{
+	double Distance;
+	double dt;
+} tSensorData;
+
 class pts {
     public:
         double x;

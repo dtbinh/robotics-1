@@ -36,6 +36,10 @@ class CDummySonarProxy : public CDummyClientProxy
 private:
 	simxInt SensorHandles[16];
 	simxFloat SensorDistances[16];
+
+	/// xxx
+	unsigned char* cSignal;
+	simxInt sLength;
 public:
 	CDummySonarProxy(CDummyRobot * pRobot);
 	virtual ~CDummySonarProxy();

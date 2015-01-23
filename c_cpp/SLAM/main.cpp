@@ -9,6 +9,7 @@
 #include "Test/CBaseTest.h"
 #include "Test/CFileWriter.h"
 #include "basedef.h"
+#include "basefcn.h"
 #ifdef __WIN32__
 #include <windows.h>
 #endif
@@ -17,26 +18,26 @@ int main(void)
 {
 	std::list<pts> lPoints;
 	CFileWriter* FileWriter = CFileWriter::getInstance();
-//	CBaseTest cb;
-//
-//	double prevTime = 0, dTime = 0;
-//
-//	cb.getDeltaTime(&prevTime);
-//	dTime = cb.getDeltaTime(&prevTime);
-//
-//	printf("Delta time: %f\n", dTime);
+	CBaseTest cb;
 
-//	cb.runTask(NULL, NULL);
+	double prevTime = 0, dTime = 0;
 
-	CDummyRobot robot("127.0.0.1");
-	CDummySonarProxy sp(&robot);
-	CDummyPosition2dProxy pp(&robot);
+	getDeltaTime(&prevTime);
+	dTime = getDeltaTime(&prevTime);
 
-	for (int ii=0; ii<=10; ++ii)
-	{
-		robot.Read();
-		extApi_sleepMs(5);
-	}
+	printf("Delta time: %f\n", dTime);
+
+	cb.runTask(0, NULL);
+
+//	CDummyRobot robot("127.0.0.1");
+//	CDummySonarProxy sp(&robot);
+//	CDummyPosition2dProxy pp(&robot);
+//
+//	for (;;)//int ii=0; ii<=10; ++ii)
+//	{
+//		robot.Read();
+//		extApi_sleepMs(5);
+//	}
 
 	delete FileWriter;
 

@@ -13,6 +13,7 @@
 #define CDUMMYROBOT_H_
 
 #include "../basedef.h"
+#include "../basefcn.h"
 #include <string>
 #include "CDummyClientProxy.h"
 
