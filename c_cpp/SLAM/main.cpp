@@ -9,6 +9,7 @@
 #include "Test/CBaseTest.h"
 #include "Test/CFileWriter.h"
 #include "basedef.h"
+#include "basefcn.h"
 #ifdef __WIN32__
 #include <windows.h>
 #endif
@@ -21,21 +22,21 @@ int main(void)
 
 	double prevTime = 0, dTime = 0;
 
-	cb.getDeltaTime(&prevTime);
-	dTime = cb.getDeltaTime(&prevTime);
+	getDeltaTime(&prevTime);
+	dTime = getDeltaTime(&prevTime);
 
 	printf("Delta time: %f\n", dTime);
 
-	cb.runTask(NULL, NULL);
+	cb.runTask(0, NULL);
 
 //	CDummyRobot robot("127.0.0.1");
 //	CDummySonarProxy sp(&robot);
-////
-//	for (int ii=0; ii<=10; ++ii)
+//	CDummyPosition2dProxy pp(&robot);
+//
+//	for (;;)//int ii=0; ii<=10; ++ii)
 //	{
 //		robot.Read();
 //		extApi_sleepMs(5);
-////		Sleep(100);
 //	}
 
 	delete FileWriter;

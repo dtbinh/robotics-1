@@ -21,6 +21,7 @@ CDummyRobot::~CDummyRobot() {
 
 void CDummyRobot::Connect() {
 	printf("Connecting to %s\n", sHostname.c_str());
+
 	iClientID = simxStart(
 			(simxChar*) sHostname.c_str(),
 			iPortNumber,
@@ -29,6 +30,7 @@ void CDummyRobot::Connect() {
 			2000,
 			5
 	);
+
 	printf("Client id: %d\n", iClientID);
 }
 
@@ -40,16 +42,19 @@ void CDummyRobot::Disconnect() {
 }
 
 void CDummyRobot::Read() {
+	double dt = 0.0, prevTime = 0.0;
+
+	getDeltaTime(&prevTime);
+
 	if (-1 != iClientID) {
-//		simxInt leftMotorHandle = 0;
-//		simxGetObjectHandle(iClientID, "Pioneer_p3dx_leftMotor", &leftMotorHandle, simx_opmode_oneshot);
-//		simxSetJointTargetVelocity(iClientID, leftMotorHandle, 0.4, simx_opmode_oneshot);
 		std::list<tPlist>::iterator iProxies;
 		for (iProxies = Proxies.begin(); iProxies != Proxies.end(); ++iProxies)
 		{
 			(*iProxies)->Call();
 		}
 	}
+	dt = getDeltaTime(&prevTime);
+//	printf("Robot::Read execution time: %f\n", dt);
 }
 
 CDummyRobot::CDummyRobot(std::string Hostname) {
@@ -65,6 +70,6 @@ simxInt CDummyRobot::getClientId() const {
 
 bool CDummyRobot::RegisterProxy(CDummyClientProxy * pProxy) {
 	Proxies.push_back(pProxy);
-//	printf("Registering proxy: %08X\n", pProxy);
+	printf("Registering proxy: %08X\n", pProxy);
 	return true;
 }

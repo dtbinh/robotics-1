@@ -11,6 +11,7 @@
 CBaseTest::CBaseTest() {
 	FileWriter = CFileWriter::getInstance();
 	sp1 = new CDummySonarProxy(&robot);
+	pp = new CDummyPosition2dProxy(&robot);
 
 	minErr = 0.2;
 	flagPredict = false;
@@ -27,20 +28,20 @@ CBaseTest::CBaseTest() {
 
 	sensPosition[0] 	= (tSensor) { 0.075, 0.130, 0, 90 };
 	sensPosition[1] 	= (tSensor) { 0.115, 0.115, 0, 50 };
-	sensPosition[2] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[3] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[4] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[5] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[6] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[7] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[8] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[9] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[10] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[11] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[12] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[13] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[14] 	= (tSensor) { 0.075, 0.130, 0, 90 };
-	sensPosition[15] 	= (tSensor) { 0.075, 0.130, 0, 90 };
+	sensPosition[2] 	= (tSensor) { 0.150, 0.080, 0, 30 };
+	sensPosition[3] 	= (tSensor) { 0.170, 0.025, 0, 10 };
+	sensPosition[4] 	= (tSensor) { 0.170, -0.025, 0, -10 };
+	sensPosition[5] 	= (tSensor) { 0.150, -0.080, 0, -30 };
+	sensPosition[6] 	= (tSensor) { 0.115, -0.115, 0, -50 };
+	sensPosition[7] 	= (tSensor) { 0.075, -0.130, 0, -90 };
+	sensPosition[8] 	= (tSensor) { -0.155, -0.130, 0, -90 };
+	sensPosition[9] 	= (tSensor) { -0.195, -0.115, 0, -130 };
+	sensPosition[10] 	= (tSensor) { -0.230, -0.080, 0, -150 };
+	sensPosition[11] 	= (tSensor) { -0.250, -0.025, 0, -170 };
+	sensPosition[12] 	= (tSensor) { -0.250, 0.025, 0, 170 };
+	sensPosition[13] 	= (tSensor) { -0.230, 0.080, 0, 150 };
+	sensPosition[14] 	= (tSensor) { -0.195, 0.115, 0, 130 };
+	sensPosition[15] 	= (tSensor) { -0.155, 0.130, 0, 90 };
 
 	//		{ 0.075, 0.130, 90 },
 	//		{ 0.115, 0.115, 50 },
@@ -74,6 +75,8 @@ int CBaseTest::addPoint(double x, double y, double &dx, double &dy, double &da, 
 	std::list<lns>::iterator pL;
 	double maxDistance = 999, d1, d2, dist, error, ex[2], ey[2];
 
+//	printf("Add point request: x=%f, y=%f\n", x, y);
+
 	points.x = x;
 	points.y = y;
 	dx = 0;
@@ -81,6 +84,9 @@ int CBaseTest::addPoint(double x, double y, double &dx, double &dy, double &da, 
 
 	bool flagInsert = false;
 	bool flagLine = false;
+
+//	lPoints.push_back(points);
+//	flagInsert = true;
 
 	if (lLines.size() > 0) {
 		for (pL = lLines.begin(); pL != lLines.end(); ++pL) {
@@ -195,18 +201,6 @@ void CBaseTest::getNewEdges(double& dStartX, double& dStartY, double& dEndX,
 	}
 }
 
-double CBaseTest::getDeltaTime(double *dPrevTime) {
-	double diff = 0.0;
-	struct timeval cTime;
-	gettimeofday(&cTime, NULL);
-	if (*dPrevTime > 0) {
-		diff = ((cTime.tv_sec+(cTime.tv_usec/1000000.0)) - *dPrevTime);
-		*dPrevTime = cTime.tv_sec+(cTime.tv_usec/1000000.0);
-	} else {
-		*dPrevTime = cTime.tv_sec+(cTime.tv_usec/1000000.0);
-	}
-	return diff;
-}
 
 void CBaseTest::writePtsToFile()
 {
@@ -513,44 +507,44 @@ double CBaseTest::roundDec(double num) {
 }
 
 bool CBaseTest::findLineSegment(double cth, double cdist) {
-//	std::list<pts>::iterator pI, pP;
-//	lns lin1;
-//	pts tpt;
-//	int num = 0;
-//	double x[2], y[2];
-//
-//	lTpts.sort();
-//
-//	pP = pI = lTpts.begin();
-//	while ((pI != lTpts.end())&&(!lTpts.empty())) {
-//		x[0] = pI->x;
-//		y[0] = pI->y;
-//		num = 0;
-//		chkDist(num, pI, pI->x, pI->y);
-//		if (num > 20) {
-//			advance(pP, num-1);
-//			x[1] = pP->x;
-//			y[1] = pP->y;
-//			lin1.th = cth;
-//			lin1.r = cdist;
-//			lin1.x[0] = x[0];
-//			lin1.x[1] = x[1];
-//			lin1.y[0] = y[0];
-//			lin1.y[1] = y[1];
-//			lLines.push_back(lin1);
-//			writeLnsToFile();
-//			pP++;
-//			pP = pI = lTpts.erase(pI, pP);
-//		} else {
-//			if (num > 0) {
-//				advance(pI, num);
-//				advance(pP, num);
-//			} else {
-//				pI++;
-//				pP++;
-//			}
-//		}
-//	}
+	std::list<pts>::iterator pI, pP;
+	lns lin1;
+	pts tpt;
+	int num = 0;
+	double x[2], y[2];
+
+	lTpts.sort();
+
+	pP = pI = lTpts.begin();
+	while ((pI != lTpts.end())&&(!lTpts.empty())) {
+		x[0] = pI->x;
+		y[0] = pI->y;
+		num = 0;
+		chkDist(num, pI, pI->x, pI->y);
+		if (num > 20) {
+			advance(pP, num-1);
+			x[1] = pP->x;
+			y[1] = pP->y;
+			lin1.th = cth;
+			lin1.r = cdist;
+			lin1.x[0] = x[0];
+			lin1.x[1] = x[1];
+			lin1.y[0] = y[0];
+			lin1.y[1] = y[1];
+			lLines.push_back(lin1);
+			writeLnsToFile();
+			pP++;
+			pP = pI = lTpts.erase(pI, pP);
+		} else {
+			if (num > 0) {
+				advance(pI, num);
+				advance(pP, num);
+			} else {
+				pI++;
+				pP++;
+			}
+		}
+	}
 	return false;
 }
 
@@ -640,8 +634,8 @@ int CBaseTest::runTask(int argc, char* argv[])
   	{
     	robot.Read();
 		dT = getDeltaTime(&dT);
-		currentV = sqrt(pp.GetXSpeed()*pp.GetXSpeed() + pp.GetYSpeed()*pp.GetYSpeed());
-		currentW = pp.GetYawSpeed();
+		currentV = sqrt(pp->GetXSpeed()*pp->GetXSpeed() + pp->GetYSpeed()*pp->GetYSpeed());
+		currentW = pp->GetYawSpeed();
 		if (numScan == 0) {
 
 		}
@@ -882,7 +876,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 
 				PC = PZ - MW*MS*MW.t();
 
-				printf("x: %f, y: %f, a: %f\n", currentX, currentY, rtod(currentAngle));
+//				printf("x: %f, y: %f, a: %f\n", currentX, currentY, rtod(currentAngle));
 			} else {
 				PC.ReSize(matrAsize, matrAsize);
 				XC.ReSize(matrAsize, 1);
@@ -1015,6 +1009,27 @@ int CBaseTest::runTask(int argc, char* argv[])
 
 		setSpeeds((void *) msh);
 	}
+
+	return 0;
+}
+
+int CBaseTest::runSLAM() {
+
+//	currentX = currentY = currentAngle = currentV = currentW = 0.0;
+//
+//	while (true)
+//	{
+//		robot.Read();
+//		currentX = pp
+//
+//		double obX, obY;
+//		for (int i=0; i<16; i++)
+//		{
+//			double sD = sqrt((double)((sensPosition[i][0]+0.04)*(sensPosition[i][0]+0.04)+sensPosition[i][1]*sensPosition[i][1]));
+//			obX = currentX + (sp[i] + sD)*cos(dtor(sensPosition[i][2])+currentAngle);
+//			obY = currentY + (sp[i] + sD)*sin(dtor(sensPosition[i][2])+currentAngle);
+//		}
+//	}
 
 	return 0;
 }

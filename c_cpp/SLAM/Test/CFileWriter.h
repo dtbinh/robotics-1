@@ -19,6 +19,7 @@
 #define CALCULATIONS2_FILENAME		"./calc1.txt"
 #define ANGLES_FILENAME				"./angle.txt"
 #define SCANNING_ERROR_FILENAME 	"./scan_err.txt"
+#define SENSOR_DATA_FILENAME		"./sensor_data.txt"
 
 
 class CFileWriter {
@@ -32,6 +33,8 @@ public:
 
 	void WritePointListToFile(std::list<pts>* pList, const char* cFileName);
 	void WriteLineListToFile(std::list<lns>* pList, const char* cFileName);
+
+	void WriteSensorData(double *sensorDistance, double *sensorDt, int length);
 };
 
 #endif /* CFILEWRITER_H_ */

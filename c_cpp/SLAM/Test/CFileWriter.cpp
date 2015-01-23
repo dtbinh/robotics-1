@@ -78,3 +78,15 @@ void CFileWriter::WriteLineListToFile(std::list<lns>* pList,
 		fclose(fp);
 	}
 }
+
+void CFileWriter::WriteSensorData(double* sensorDistance, double* sensorDt,
+		int length)
+{
+	FILE *fp = fopen(SENSOR_DATA_FILENAME, "a");
+	for (int ii=0; ii<length; ii++)
+	{
+		///		SensorNum, Distance, dT
+		fprintf(fp,"%f\t%f\t%f\n", ii+1, sensorDistance[ii], sensorDt[ii]);
+	}
+	fclose(fp);
+}
