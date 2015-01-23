@@ -6,7 +6,7 @@
  */
 
 #include "CBaseTest.h"
-#include <string.h>
+//#include <string.h>
 
 CBaseTest::CBaseTest() {
 	FileWriter = CFileWriter::getInstance();
@@ -507,44 +507,44 @@ double CBaseTest::roundDec(double num) {
 }
 
 bool CBaseTest::findLineSegment(double cth, double cdist) {
-	std::list<pts>::iterator pI, pP;
-	lns lin1;
-	pts tpt;
-	int num = 0;
-	double x[2], y[2];
-
-	lTpts.sort();
-
-	pP = pI = lTpts.begin();
-	while ((pI != lTpts.end())&&(!lTpts.empty())) {
-		x[0] = pI->x;
-		y[0] = pI->y;
-		num = 0;
-		chkDist(num, pI, pI->x, pI->y);
-		if (num > 20) {
-			advance(pP, num-1);
-			x[1] = pP->x;
-			y[1] = pP->y;
-			lin1.th = cth;
-			lin1.r = cdist;
-			lin1.x[0] = x[0];
-			lin1.x[1] = x[1];
-			lin1.y[0] = y[0];
-			lin1.y[1] = y[1];
-			lLines.push_back(lin1);
-			writeLnsToFile();
-			pP++;
-			pP = pI = lTpts.erase(pI, pP);
-		} else {
-			if (num > 0) {
-				advance(pI, num);
-				advance(pP, num);
-			} else {
-				pI++;
-				pP++;
-			}
-		}
-	}
+//	std::list<pts>::iterator pI, pP;
+//	lns lin1;
+////	pts tpt;
+//	int num = 0;
+//	double x[2], y[2];
+//
+//	lTpts.sort();
+//
+//	pP = pI = lTpts.begin();
+//	while ((pI != lTpts.end())&&(!lTpts.empty())) {
+//		x[0] = pI->x;
+//		y[0] = pI->y;
+//		num = 0;
+//		chkDist(num, pI, pI->x, pI->y);
+//		if (num > 20) {
+//			advance(pP, num-1);
+//			x[1] = pP->x;
+//			y[1] = pP->y;
+//			lin1.th = cth;
+//			lin1.r = cdist;
+//			lin1.x[0] = x[0];
+//			lin1.x[1] = x[1];
+//			lin1.y[0] = y[0];
+//			lin1.y[1] = y[1];
+//			lLines.push_back(lin1);
+//			writeLnsToFile();
+//			pP++;
+//			pP = pI = lTpts.erase(pI, pP);
+//		} else {
+//			if (num > 0) {
+//				advance(pI, num);
+//				advance(pP, num);
+//			} else {
+//				pI++;
+//				pP++;
+//			}
+//		}
+//	}
 	return false;
 }
 

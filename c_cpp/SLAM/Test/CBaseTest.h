@@ -10,8 +10,7 @@
 
 #include "../basedef.h"
 #include "../basefcn.h"
-#include <stdio.h>
-#include <sys/time.h>
+//#include <stdio.h>
 #include "CFileWriter.h"
 #include "../newmat10/include.h"            // or #include "newmat.h"
 #include "../newmat10/newmatap.h"
