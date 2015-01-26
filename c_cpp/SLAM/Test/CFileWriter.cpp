@@ -101,7 +101,7 @@ void CFileWriter::WriteSensorData(double* sensorDistance, double* sensorDt,
 	for (int ii=0; ii<length; ii++)
 	{
 		///		SensorNum, Distance, dT
-		fprintf(fp,"%f\t%f\t%f\n", ii+1, sensorDistance[ii], sensorDt[ii]);
+		fprintf(fp,"%d\t%f\t%f\n", ii+1, sensorDistance[ii], sensorDt[ii]);
 	}
 	fclose(fp);
 }

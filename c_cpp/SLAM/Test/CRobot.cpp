@@ -10,8 +10,8 @@
 
 CRobot::CRobot(CDummyRobot *_Instance)
 {
-	Position = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-	Dynamics = { 0.0, 0.0 };
+//	Position = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+//	Dynamics = { 0.0, 0.0 };
 	LastUpdateTime = 0.0;
 
 	SensorPosition[0] 	= (tSensor) { 0.1064, 0.1382, 0, 90 };
@@ -117,7 +117,7 @@ void CRobot::Update()
 //				OC = RC*RY*SC*SY*SM*OD;
 
 				double SM[] = {
-					cos(dtor(SensorPosition[iCnt].Theta)), -sin(dtor(SensorPosition[iCnt].Theta)), 0, SensorPosition[iCnt].PosX,
+					cos(dtor(SensorPosition[iCnt].Theta)), -sin(dtor(SensorPosition[iCnt].Theta)), 0, SensorPosition[iCnt].PosX-0.0445,
 					sin(dtor(SensorPosition[iCnt].Theta)), cos(dtor(SensorPosition[iCnt].Theta)), 0, SensorPosition[iCnt].PosY,
 					0, 0, 1, SensorPosition[iCnt].PosZ,
 					0, 0, 0, 1
@@ -141,12 +141,17 @@ void CRobot::Update()
 				RobotMatrix << RM;
 
 
-				ObstacleMatrix = RobotMatrix * SensorMatrix * MeasureMatrix;
+				ObstacleMatrix = RobotMatrix * SensorMatrix;
 
 //				printf("Sensor distance: %f\n", dDistance);
 				point.PosX = ObstacleMatrix(1, 4);
 				point.PosY = ObstacleMatrix(2, 4);
 				Map->AddPoint(point);
+//				point.PosX = point.PosY = 0.0;
+
+//				point.PosX = Position.PosX;
+//				point.PosY = Position.PosY;
+//				Map->AddPoint(point);
 			}
 		}
 

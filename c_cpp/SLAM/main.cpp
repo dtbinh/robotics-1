@@ -41,6 +41,11 @@ int main(void)
 //	}
 
 
+//	for (int ii=0;ii<360;ii++)
+//	{
+//		printf("Rad: %f\tdeg:%f\n", dtor(ii), rtod(dtor(ii)));
+//	}
+
 	CDummyRobot connection("127.0.0.1");
 	CRobot robot(&connection);
 

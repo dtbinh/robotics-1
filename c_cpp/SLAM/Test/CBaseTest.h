@@ -26,10 +26,6 @@ struct locLines {
 	double y[2];
 };
 
-
-
-
-
 //sSensor sensors[16] = {
 //		{ 0.075, 0.130, 90 },
 //		{ 0.115, 0.115, 50 },

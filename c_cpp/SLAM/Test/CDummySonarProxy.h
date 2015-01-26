@@ -30,14 +30,14 @@
 #define SENSOR_NAME_15		"Pioneer_p3dx_ultrasonicSensor15"
 #define SENSOR_NAME_16		"Pioneer_p3dx_ultrasonicSensor16"
 
-#define MAX_SONAR_DISTANCE	(1.2)
+#define MAX_SONAR_DISTANCE	(0.8)
 #define MIN_SONAR_DISTANCE	(0.2)
 
 
 class CDummySonarProxy : public CDummyClientProxy
 {
 private:
-	simxInt SensorHandles[16];
+//	simxInt SensorHandles[16];
 	simxFloat SensorDistances[16];
 
 	/// xxx
