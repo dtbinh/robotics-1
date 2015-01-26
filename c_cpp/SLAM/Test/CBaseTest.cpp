@@ -210,7 +210,7 @@ void CBaseTest::writePtsToFile()
 bool CBaseTest::findIntersection(double dPointX, double dPointY, double dx,
 		double dy, double da, int num) {
 	std::list<lns>::iterator pL;
-	//double px, py;
+	double px, py;
 
 	double cx[2], cy[2], cth, cdist, a, c, tmp;
 
@@ -650,6 +650,8 @@ int CBaseTest::runTask(int argc, char* argv[])
 		double dx[16], dy[16], da[16];
 		double xdisp=0, ydisp=0, adisp = 0, cntDisp = 0;
 
+		printf("Robot position: (%0.2f, %0.2f)\n", currentX, currentY);
+
 		try {
 			int matrAsize = lLines.size()*2 + 3;
 			IdentityMatrix IM(matrAsize);
@@ -731,7 +733,7 @@ int CBaseTest::runTask(int argc, char* argv[])
 			for (int i=0; i<16; i++) {
 				double d1, beta, oxr, oyr;
 
-				oxr = sp[i]*cos(dtor(sensPosition[i].Theta))+(sensPosition[i].Theta);
+				oxr = sp[i]*cos(dtor(sensPosition[i].Theta))+(sensPosition[i].PosX);
 				oyr = sp[i]*sin(dtor(sensPosition[i].Theta))+sensPosition[i].PosY;
 
 				d1 = sqrt(oxr*oxr+oyr*oyr);
@@ -883,8 +885,8 @@ int CBaseTest::runTask(int argc, char* argv[])
 				XC = XZ;
 				PC = PZ;
 			}
-				currentX = XC(1,1);
-				currentY = XC(2,1);
+//				currentX = XC(1,1);
+//				currentY = XC(2,1);
 				currentAngle = XC(3,1);
 				prevX = XC(1,1);
 				prevY = XC(2,1);
@@ -1020,7 +1022,7 @@ int CBaseTest::runSLAM() {
 //	while (true)
 //	{
 //		robot.Read();
-//		currentX = pp
+////		currentX = pp
 //
 //		double obX, obY;
 //		for (int i=0; i<16; i++)

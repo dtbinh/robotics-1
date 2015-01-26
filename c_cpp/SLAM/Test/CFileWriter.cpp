@@ -79,6 +79,21 @@ void CFileWriter::WriteLineListToFile(std::list<lns>* pList,
 	}
 }
 
+void CFileWriter::WritePointListToFile(std::list<tMapPoint>* pList, std::string FileName)
+{
+	std::list<tMapPoint>::iterator pI;
+	FILE *fp = NULL;
+
+	if ( (!FileName.empty()) && (NULL != pList) )
+	{
+		fp = fopen(FileName.c_str(),"w+");
+		for (pI = pList->begin(); pI != pList->end(); ++pI) {
+			fprintf(fp,"%f\t%f\n", pI->PosX, pI->PosY);
+		}
+		fclose(fp);
+	}
+}
+
 void CFileWriter::WriteSensorData(double* sensorDistance, double* sensorDt,
 		int length)
 {

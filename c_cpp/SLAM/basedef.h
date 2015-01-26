@@ -18,8 +18,21 @@
 #define PI 				(double) (std::atan(1) * 4)
 #define rtod(deg)  		(double) ((deg) * PI / 180)
 #define dtor(rad)  		(double) ((rad) * 180 / PI)
-#define sign(number) 	(number >= 0)
+#define sign(number) 	(number >= 0) ? 1 : -1
 
+
+typedef struct sMapPoint
+{
+	double PosX;
+	double PosY;
+}tMapPoint;
+
+typedef struct sSensor {
+	double PosX;
+	double PosY;
+	double PosZ;
+	double Theta;
+}tSensor;
 
 typedef struct sSensorData
 {

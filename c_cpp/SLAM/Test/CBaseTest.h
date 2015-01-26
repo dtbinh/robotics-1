@@ -27,12 +27,7 @@ struct locLines {
 };
 
 
-typedef struct sSensor {
-	double PosX;
-	double PosY;
-	double PosZ;
-	double Theta;
-}tSensor;
+
 
 
 //sSensor sensors[16] = {

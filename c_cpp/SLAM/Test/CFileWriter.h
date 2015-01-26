@@ -34,6 +34,9 @@ public:
 	void WritePointListToFile(std::list<pts>* pList, const char* cFileName);
 	void WriteLineListToFile(std::list<lns>* pList, const char* cFileName);
 
+	void WritePointListToFile(std::list<tMapPoint>* pList, std::string FileName);
+
+
 	void WriteSensorData(double *sensorDistance, double *sensorDt, int length);
 };
 

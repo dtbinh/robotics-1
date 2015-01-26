@@ -10,6 +10,7 @@
 #include "Test/CFileWriter.h"
 #include "basedef.h"
 #include "basefcn.h"
+#include "Test/CRobot.h"
 #ifdef __WIN32__
 #include <windows.h>
 #endif
@@ -29,13 +30,23 @@ int main(void)
 //
 //	cb.runTask(0, NULL);
 
-	CDummyRobot robot("127.0.0.1");
-	CDummySonarProxy sp(&robot);
-	CDummyPosition2dProxy pp(&robot);
+//	CDummyRobot robot("127.0.0.1");
+//	CDummySonarProxy sp(&robot);
+//	CDummyPosition2dProxy pp(&robot);
+//
+//	for (;;)//int ii=0; ii<=10; ++ii)
+//	{
+//		robot.Read();
+//		extApi_sleepMs(5);
+//	}
 
-	for (;;)//int ii=0; ii<=10; ++ii)
+
+	CDummyRobot connection("127.0.0.1");
+	CRobot robot(&connection);
+
+	for (;;)
 	{
-		robot.Read();
+		robot.Update();
 		extApi_sleepMs(5);
 	}
 
