@@ -21,7 +21,7 @@ CDummyPosition2dProxy::CDummyPosition2dProxy(CDummyRobot* pRobot) : CDummyClient
 //	simxGetObjectHandle(clientID, RIGHT_MOTOR_NAME, &RightMotorHandle, simx_opmode_oneshot_wait);
 
 	///xxx
-	simxReadStringStream(clientID,"speedValues",&cSignal,&sLength,simx_opmode_streaming);
+	simxReadStringStream(clientID, "speedValues", &cSignal, &sLength, simx_opmode_streaming);
 
 }
 

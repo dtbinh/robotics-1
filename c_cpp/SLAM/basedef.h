@@ -16,10 +16,23 @@
 #endif
 
 #define PI 				(double) (std::atan(1) * 4)
-#define rtod(deg)  		(double) ((deg) * PI / 180)
-#define dtor(rad)  		(double) ((rad) * 180 / PI)
-#define sign(number) 	(number >= 0)
+#define rtod(rad)  		(double) ((rad) * 180 / PI)
+#define dtor(deg)  		(double) ((deg) * PI / 180)
+#define sign(number) 	((number >= 0) ? 1 : -1)
 
+
+typedef struct sMapPoint
+{
+	double PosX;
+	double PosY;
+}tMapPoint;
+
+typedef struct sSensor {
+	double PosX;
+	double PosY;
+	double PosZ;
+	double Theta;
+}tSensor;
 
 typedef struct sSensorData
 {
@@ -32,18 +45,25 @@ class pts {
         double x;
         double y;
 
-    	bool operator < (const pts& rhs) {
-        	if (x < rhs.x) return true;
-        	if ((x == rhs.x)&&(y < rhs.y)) return true;
+    	bool operator < (const pts& rhs) const {
+    		bool bResult = false;
+        	if (this->x < rhs.x)
+        	{
+        		bResult =  true;
+        	}
+        	else if ( (this->x == rhs.x) && (this->y < rhs.y) )
+        	{
+        		bResult = true;
+        	}
 			//if (sqrt((x-rhs.x)*(x-rhs.x)+(y-rhs.y)*(y-rhs.y)) < maxDist) {
 				//maxDist = sqrt((x-rhs.x)*(x-rhs.x)+(y-rhs.y)*(y-rhs.y));
 				//return true;
 			//}
-        	return false;
+        	return bResult;
    		}
 
 		bool operator == (const pts& rhs) {
-			return ((rhs.x == x)&&(rhs.y == y));
+			return ((rhs.x == this->x)&&(rhs.y == this->y));
 		}
 
 };
@@ -60,7 +80,7 @@ class lns {
 		}
 
 		bool operator < (lns& rhs) {
-			return lineSize() < rhs.lineSize();
+			return (this->lineSize() < rhs.lineSize());
 		}
 };
 

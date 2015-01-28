@@ -70,6 +70,6 @@ simxInt CDummyRobot::getClientId() const {
 
 bool CDummyRobot::RegisterProxy(CDummyClientProxy * pProxy) {
 	Proxies.push_back(pProxy);
-	printf("Registering proxy: %08X\n", pProxy);
+//	printf("Registering proxy: %08X\n", pProxy);
 	return true;
 }

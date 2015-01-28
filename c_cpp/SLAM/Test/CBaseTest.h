@@ -10,8 +10,7 @@
 
 #include "../basedef.h"
 #include "../basefcn.h"
-#include <stdio.h>
-#include <sys/time.h>
+//#include <stdio.h>
 #include "CFileWriter.h"
 #include "../newmat10/include.h"            // or #include "newmat.h"
 #include "../newmat10/newmatap.h"
@@ -26,15 +25,6 @@ struct locLines {
 	double x[2];
 	double y[2];
 };
-
-
-typedef struct sSensor {
-	double PosX;
-	double PosY;
-	double PosZ;
-	double Theta;
-}tSensor;
-
 
 //sSensor sensors[16] = {
 //		{ 0.075, 0.130, 90 },
