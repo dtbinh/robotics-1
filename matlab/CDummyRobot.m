@@ -51,9 +51,11 @@ classdef CDummyRobot < handle
             element.ProxiesCount = element.ProxiesCount + 1;
             element.Proxies{element.ProxiesCount} = proxy;
         end
-        
+
         function delete(element)
+            disp('Deleting CDummyRobot');
             element.Disconnect();
+            element.vrep.delete();
         end
     end
     

@@ -5,7 +5,12 @@ classdef (Sealed) CExperiment < handle
     properties
         RobotPositions = [];
         SonarMeasurements = [];
+        PositionFigure = [];% figure('keypressfcn',@CExperiment.KeyPress);
         
+        Timer = [];
+        TaskFunction = [];
+        Period = 0.02;
+       
         Clients = 0;
     end
     
@@ -13,27 +18,38 @@ classdef (Sealed) CExperiment < handle
         function element = getInstance()
             persistent localObj
             if isempty(localObj) || ~isvalid(localObj)
-                localObj = CExperiment;
+                localObj = CExperiment();
             end
             element = localObj;
             element.Clients = element.Clients + 1;
-            disp(['Experiment clients: ', num2str(element.Clients)]);
+%             disp(['Experiment clients: ', num2str(element.Clients)]);
         end
         
         function releaseInstance(element)
             element.Clients = element.Clients - 1;
-            disp(['Experiment clients: ', num2str(element.Clients)]);
-            if (element.Clients <= 0)
-%                 delete(element);
+%             disp(['Experiment clients: ', num2str(element.Clients)]);
+            if (element.Clients == 0)
+                delete(element);
             end
+        end
+        
+               
+    end
+    
+    methods (Access = private)
+        function element = CExperiment()
+            disp('CExperiment created');
+        end
+        
+        function delete(element)
+            delete(element.Timer);
+            delete(element.PositionFigure);
+            element.TaskFunction = [];
+            disp('Deleting CExperiment');
         end
     end
     
     methods
-        function element = CExperiment()
-            disp('Experiment created');
-        end
-        
         function AddRobotPositions(element, positions)
             element.RobotPositions = [ ...
                 element.RobotPositions; ...
@@ -47,12 +63,46 @@ classdef (Sealed) CExperiment < handle
             element.SonarMeasurements = [element.SonarMeasurements; measurements];
         end
         
-        function Plot(element)
-            plot(element.RobotPositions(:,1), element.RobotPositions(:,2));
+        function Start(element, task)
+            element.TaskFunction = task;
+%             element.Period = period;
+            element.PositionFigure = figure( ...
+                'keypressfcn', @element.KeyPress, ...
+                'Name', 'Experiment data: press ''q'' to stop...' ...
+            );
+            element.Timer = timer( ...
+                'TimerFcn',{@element.TaskFcn}, ...
+                'Period', element.Period, ...
+                'ExecutionMode','fixedSpacing' ...
+            );
+            start(element.Timer);
+            disp('Experiment started');
         end
         
-        function delete(element)
-            disp('Deleting experiment');
+        function Stop(element)
+            stop(element.Timer);
+%             delete(element.Timer);
+%             delete(element.PositionFigure);
+        end
+        
+        function KeyPress(element, ~, event)
+            cmd = event.Key;
+            switch (cmd)
+                case 'q'
+                    disp('Experiment stopped');
+                    element.Stop();
+            end
+        end
+        
+        function TaskFcn(element, ~, ~)
+            element.TaskFunction();
+        end
+        
+        function Plot(element)
+            figure(element.PositionFigure);
+            if (~isempty(element.RobotPositions))
+                plot(element.RobotPositions(:,1), element.RobotPositions(:,2));
+            end
         end
     end
     

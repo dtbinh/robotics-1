@@ -3,6 +3,8 @@ classdef sSensor
     %   Detailed explanation goes here
     
     properties
+        Position = sPositionData();
+        Measure = 0;
     end
     
 end

@@ -13,6 +13,10 @@ classdef CDummyClientProxy < handle
         
         function Call(element)
         end
+        
+        function delete(element)
+            disp('Deleting CDummyClientProxy');
+        end
     end
     
 end

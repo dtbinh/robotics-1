@@ -3,12 +3,12 @@ classdef CRobot < handle
     %   Detailed explanation goes here
     
     properties
-        Position = sPositionData;
-        Dynamics = sDynamicsData;
+        Position = [];
+        Dynamics = [];
         Robot = [];
         PositionProxy = [];
         SonarProxy = [];
-        LastCallTime = tic;
+        LastCallTime = [];
     end
     
     methods
@@ -16,6 +16,9 @@ classdef CRobot < handle
             element.Robot = robot;
             element.PositionProxy = CDummyPosition2dProxy(element.Robot);
             element.SonarProxy = CDummySonarProxy(element.Robot);
+            element.LastCallTime = tic;
+            element.Position = sPositionData;
+            element.Dynamics = sDynamicsData;
         end
         
         function Update(element)
@@ -30,21 +33,21 @@ classdef CRobot < handle
             exp.AddSonarMeasurements(element.SonarProxy.SensorDistances);
             exp.releaseInstance(exp);
             
-            display(sprintf('Positions: %f, %f, %f\n', ...
-                element.Position.PosX, ...
-                element.Position.PosY, ...
-                element.Position.Alpha ));
-            
-            
-%             tmp = [element.Position.PosX, ...
+%             display(sprintf('Positions: %f, %f, %f\n', ...
+%                 element.Position.PosX, ...
 %                 element.Position.PosY, ...
-%                 element.Position.Alpha ];
-%             global Positions;
-%             Positions = [Positions; tmp];
+%                 element.Position.Alpha ));
+            
         end
         
         function CalculatePointsPosition(element)
             
+        end
+        
+        function delete(element)
+            disp('Deleting CRobot');
+            delete(element.PositionProxy);
+            delete(element.SonarProxy);
         end
     end
     
