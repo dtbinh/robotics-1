@@ -10,8 +10,8 @@ classdef CAlgorthms
         function m = GetTransformationMatrix(element, positionData)
             % Currently implemented only for XY plane :]
             m = [...
-                cos(positionData.Alpha) , -sin(positionData.Alpha)  , 0 , positionData.PosX;
-                sin(positionData.Alpha) , cos(positionData.Alpha)   , 0 , positionData.PosY;
+                cos(positionData.Gamma) , -sin(positionData.Gamma)  , 0 , positionData.PosX;
+                sin(positionData.Gamma) , cos(positionData.Gamma)   , 0 , positionData.PosY;
                 0                       , 0                         , 1 , 0;
                 0                       , 0                         , 0 , 1
                 ];

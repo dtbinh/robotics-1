@@ -6,6 +6,8 @@ classdef CDummyPosition2dProxy < CDummyClientProxy
         XSpeed = 0;
         YSpeed = 0;
         YawSpeed = 0;
+        RealPosition = sPositionData;
+        IsInitialized = false;
     end
     
     methods
@@ -27,6 +29,17 @@ classdef CDummyPosition2dProxy < CDummyClientProxy
                 element.XSpeed = speeds(1);
                 element.YSpeed = speeds(2);
                 element.YawSpeed = speeds(3);
+                element.RealPosition.PosX  = speeds(4);
+                element.RealPosition.PosY  = speeds(5);
+                element.RealPosition.PosZ  = speeds(6);
+                element.RealPosition.Alpha  = speeds(7);
+                element.RealPosition.Betha  = speeds(8);
+                element.RealPosition.Gamma  = speeds(9);
+                
+                % Set as initialized on first data read
+                if (~element.IsInitialized)
+                    element.IsInitialized = true;
+                end
             end    
         end
     end

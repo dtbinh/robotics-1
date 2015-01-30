@@ -33,8 +33,10 @@ classdef CDummyRobot < handle
         end
         
         function Read(element)
-            for k = 1:element.ProxiesCount
-                element.Proxies{k}.Call();
+            if (-1 ~= element.ClientID)
+                for k = 1:element.ProxiesCount
+                    element.Proxies{k}.Call();
+                end
             end
         end
         

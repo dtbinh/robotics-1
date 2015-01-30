@@ -9,7 +9,7 @@ classdef (Sealed) CExperiment < handle
         
         Timer = [];
         TaskFunction = [];
-        Period = 0.02;
+        Period = 0.1;
        
         Clients = 0;
     end
@@ -55,7 +55,7 @@ classdef (Sealed) CExperiment < handle
                 element.RobotPositions; ...
                 positions.PosX, ...
                 positions.PosY, ...
-                positions.Alpha ...
+                positions.Gamma ...
             ];
         end
         
@@ -98,10 +98,30 @@ classdef (Sealed) CExperiment < handle
             element.TaskFunction();
         end
         
+        function PlotRawPoints(element, robot)
+            pts = robot.Map.RawPoints;
+            if (~isempty(pts))
+                x = pts(:, 1);
+                y = pts(:,2);
+                plot(x,y,'*');
+                axis('equal');
+            end
+        end
+        
+        function PlotRobotRawPoints(element, robot)
+            pts = robot.RawPoints;
+            if (~isempty(pts))
+                x = pts(:, 1);
+                y = pts(:,2);
+                plot(x,y,'*');
+            end
+        end
+        
         function Plot(element)
             figure(element.PositionFigure);
             if (~isempty(element.RobotPositions))
                 plot(element.RobotPositions(:,1), element.RobotPositions(:,2));
+                axis('equal');
             end
         end
     end

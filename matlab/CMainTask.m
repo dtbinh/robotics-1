@@ -25,12 +25,25 @@ classdef CMainTask < handle
 
             element.Robot.Update();
 
+            
+            subplot(2, 2, [1 3], 'replace');
             element.Experiment.Plot();
+            hold on;
+            element.Robot.PlotElementSymbol();
+            hold off;
+            subplot(2,2,2);
+            element.Robot.SonarProxy.PlotSonarMeasurements();
+            hold on;
+            element.Experiment.PlotRobotRawPoints(element.Robot);
+            hold off;
+            subplot(2,2,4);
+            element.Experiment.PlotRawPoints(element.Robot);
             
         end
         
         function element = delete(element)
             disp('Deleting CMainTask');
+            element.Connection.Disconnect();
             element.Experiment.releaseInstance(element.Experiment);
 %             delete(element.Experiment);
             delete(element.Robot);

@@ -33,7 +33,7 @@ if (exist('task', 'var'))
     task.delete();
 end
 clear task;
-pause(1);
+pause(2);
 
 task = CMainTask();
 
