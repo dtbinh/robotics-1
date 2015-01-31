@@ -5,6 +5,7 @@ classdef CMap < handle
     properties
         RawPoints = [];
         RobotEncoderPositions = [];
+        RobotEncoderArray = [];
     end
     
     methods
@@ -18,6 +19,8 @@ classdef CMap < handle
         
         function AddRobotEncoderPositionPoint(element, point)
             element.RobotEncoderPositions = [element.RobotEncoderPositions; point];
+            pt = [ point.PosX, point.PosY ];
+            element.RobotEncoderArray = [ element.RobotEncoderArray; pt ];
         end
         
         function delete(element)

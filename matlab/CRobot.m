@@ -37,10 +37,10 @@ classdef CRobot < handle
                 element.Position.PosY = element.PositionProxy.YSpeed*dt + element.Position.PosY;
                 element.Position.Gamma = element.PositionProxy.YawSpeed*dt + element.Position.Gamma;
 
-                exp = CExperiment.getInstance;
-                exp.AddRobotPositions(element.Position);
-                exp.AddSonarMeasurements(element.SonarProxy.SensorDistances);
-                exp.releaseInstance(exp);
+%                 exp = CExperiment.getInstance;
+%                 exp.AddRobotPositions(element.Position);
+%                 exp.AddSonarMeasurements(element.SonarProxy.SensorDistances);
+%                 exp.releaseInstance(exp);
 
                 element.Map.AddRobotEncoderPositionPoint(element.Position);
 
