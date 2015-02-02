@@ -36,16 +36,40 @@ classdef CMainTask < handle
             subplot(2, 2, [1 3], 'replace');
             element.Experiment.PlotEncoderTrajectory(element.Robot);
             hold on;
+            element.PlotAllSensors();
             element.Robot.PlotElementSymbol();
+            axis('equal');
             hold off;
             subplot(2,2,2);
             element.Robot.SonarProxy.PlotSonarMeasurements();
+            axis('equal');
             hold on;
             element.Experiment.PlotRobotRawPoints(element.Robot);
+            axis('equal');
             hold off;
             subplot(2,2,4);
             element.Experiment.PlotRawPoints(element.Robot);
-            
+            axis('equal');
+%             axis([-10, 10, -10, 10]);            
+        end
+        
+        function PlotAllSensors(element)
+            element.Experiment.PlotRawSensorPoints(element.Robot, 1, 'g*');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 2, 'r*');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 3, 'c*');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 4, 'm*');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 5, 'go');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 6, 'ro');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 7, 'co');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 8, 'mo');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 9, 'g+');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 10, 'r+');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 11, 'c+');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 12, 'm+');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 13, 'g^');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 14, 'r^');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 15, 'c^');
+            element.Experiment.PlotRawSensorPoints(element.Robot, 16, 'm^');
         end
         
         function KeyPress(element, ~, event)

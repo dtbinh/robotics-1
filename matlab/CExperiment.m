@@ -35,7 +35,21 @@ classdef (Sealed) CExperiment < handle
                 x = pts(:, 1);
                 y = pts(:,2);
                 plot(x,y,'*');
-                axis('equal');
+            end
+        end
+        
+        function PlotRawSensorPoints(element, robot, sensorNumber, lineParameters)
+            pts = robot.Map.RawSensorPoints;
+            x = [];
+            y = [];
+            if (~isempty(pts))
+                for kk = 1:length(pts(:,1))
+                    if (sensorNumber == pts(kk,1))
+                        x = [x; pts(kk, 2)];
+                        y = [y; pts(kk,3)];
+                    end
+                end
+                plot(x,y,lineParameters);
             end
         end
         
@@ -61,7 +75,6 @@ classdef (Sealed) CExperiment < handle
         function Plot(element)
             if (~isempty(element.RobotPositions))
                 plot(element.RobotPositions(:,1), element.RobotPositions(:,2));
-                axis('equal');
             end
         end
     end

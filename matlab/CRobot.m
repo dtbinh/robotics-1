@@ -73,6 +73,7 @@ classdef CRobot < handle
                     x = pointMatrix(1,1);
                     y = pointMatrix(2,1);
                     element.Map.AddPoint(x, y);
+                    element.Map.AddPointBySensor(kk, x, y);
                 end
                 
             end

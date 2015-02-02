@@ -9,6 +9,7 @@ classdef CDummyRobot < handle
         vrep=remApi('remoteApi');
         Proxies;
         ProxiesCount = 0;
+        DataBaseClass = CDataBase();
     end
     
     methods
@@ -46,12 +47,13 @@ classdef CDummyRobot < handle
             end
         end
         
-        function RegisterProxy(element, proxy)
+        function database = RegisterProxy(element, proxy)
             if element.ProxiesCount > 0
                 element.Proxies = [ element.Proxies, cell(1) ];
             end
             element.ProxiesCount = element.ProxiesCount + 1;
             element.Proxies{element.ProxiesCount} = proxy;
+            database = element.DataBaseClass;
         end
 
         function delete(element)

@@ -27,12 +27,16 @@ classdef CDummySonarProxy < CDummyClientProxy
 -0.159538, 0.120265, 0.000000, -139.999999; ...
 -0.110295, 0.138200, 0.000000, 179.999959;
     ];
+
+        DataBase = [];
+        LastCallTime = [];
     end
     
     methods
         function element = CDummySonarProxy(robot)
             element = element@CDummyClientProxy(robot);
-            element.Robot.RegisterProxy(element);
+            element.DataBase = element.Robot.RegisterProxy(element);
+            element.LastCallTime = tic;
             sp = [];
             csp = sPositionData;
             for kk = 1:16
@@ -57,6 +61,10 @@ classdef CDummySonarProxy < CDummyClientProxy
             );
             if (err == vrep.simx_return_ok)
                 element.SensorDistances = vrep.simxUnpackFloats(data);
+%                 pts = struct(sSonarData);
+%                 pts.Measurements = element.SensorDistances;
+                [delta, element.LastCallTime] = getDeltaTime(element.LastCallTime);
+                element.DataBase.AddSonarPoint(element.SensorDistances, delta);
             end    
         end
         
