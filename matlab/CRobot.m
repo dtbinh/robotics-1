@@ -5,7 +5,7 @@ classdef CRobot < handle
     properties
         Position = [];
         Dynamics = [];
-        Robot = [];
+        Connection = [];
         PositionProxy = [];
         SonarProxy = [];
         LastCallTime = [];
@@ -15,10 +15,10 @@ classdef CRobot < handle
     end
     
     methods
-        function element = CRobot(robot)
-            element.Robot = robot;
-            element.PositionProxy = CDummyPosition2dProxy(element.Robot);
-            element.SonarProxy = CDummySonarProxy(element.Robot);
+        function element = CRobot(connection)
+            element.Connection = connection;
+            element.PositionProxy = CDummyPosition2dProxy(element.Connection);
+            element.SonarProxy = CDummySonarProxy(element.Connection);
             element.LastCallTime = tic;
             element.Position = sPositionData;
             element.Dynamics = sDynamicsData;
@@ -26,7 +26,7 @@ classdef CRobot < handle
         
         function Update(element)
             [dt, element.LastCallTime] = getDeltaTime(element.LastCallTime);
-            element.Robot.Read();
+            element.Connection.Read();
             if (element.PositionProxy.IsInitialized)
                 if (~element.IsInitialized)
                     element.IsInitialized = true;
@@ -36,14 +36,9 @@ classdef CRobot < handle
                 element.Position.PosX = element.PositionProxy.XSpeed*dt + element.Position.PosX;
                 element.Position.PosY = element.PositionProxy.YSpeed*dt + element.Position.PosY;
                 element.Position.Gamma = element.PositionProxy.YawSpeed*dt + element.Position.Gamma;
-
-%                 exp = CExperiment.getInstance;
-%                 exp.AddRobotPositions(element.Position);
-%                 exp.AddSonarMeasurements(element.SonarProxy.SensorDistances);
-%                 exp.releaseInstance(exp);
-
+                
                 element.Map.AddRobotEncoderPositionPoint(element.Position);
-
+                
                 element.CalculatePointsPosition();
             end
         end

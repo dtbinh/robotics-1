@@ -13,9 +13,9 @@ classdef CMainTask < handle
     end
     
     methods
-        function element = CMainTask()
+        function element = CMainTask(offlineMode)
             % Init robot
-            element.Connection = CDummyRobot;
+            element.Connection = CDummyRobot(offlineMode);
             element.Robot = CRobot(element.Connection);
             element.Experiment = CExperiment();
             

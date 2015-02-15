@@ -11,7 +11,10 @@ classdef CDummyClientProxy < handle
             element.Robot = robot;
         end
         
-        function Call(element)
+        function Call(element, database)
+        end
+        
+        function OfflineCall(element, database)
         end
         
         function delete(element)

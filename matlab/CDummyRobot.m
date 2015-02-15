@@ -6,15 +6,22 @@ classdef CDummyRobot < handle
         Hostname = 'localhost';
         ClientID = -1;
         PortNumber = 19997;
-        vrep=remApi('remoteApi');
+        vrep= [];
         Proxies;
         ProxiesCount = 0;
-        DataBaseClass = CDataBase();
+        
+        OfflineMode = false;
+        DataBaseClass = [];%CDataBase(false);
     end
     
     methods
-        function element = CDummyRobot()
-            element.Connect();
+        function element = CDummyRobot(offlineMode)
+            element.OfflineMode = offlineMode;
+            if (~offlineMode)
+                element.vrep = remApi('remoteApi');
+                element.Connect();
+            end
+            element.DataBaseClass = CDataBase(offlineMode);
             element.Proxies = cell(1);
             element.Proxies{1} = CDummyClientProxy(element);
         end
@@ -35,9 +42,16 @@ classdef CDummyRobot < handle
         
         function Read(element)
             if (-1 ~= element.ClientID)
+                element.DataBaseClass.AddStep();
                 for k = 1:element.ProxiesCount
-                    element.Proxies{k}.Call();
+%                     display(sprintf('Reading proxies: %d',k));
+                        element.Proxies{k}.Call(element.DataBaseClass);
                 end
+            elseif (element.OfflineMode)
+                for k = 1:element.ProxiesCount
+                    element.Proxies{k}.OfflineCall(element.DataBaseClass);
+                end
+                element.DataBaseClass.StepNumber = element.DataBaseClass.StepNumber + 1;
             end
         end
         
@@ -47,18 +61,19 @@ classdef CDummyRobot < handle
             end
         end
         
-        function database = RegisterProxy(element, proxy)
+        function RegisterProxy(element, proxy)
             if element.ProxiesCount > 0
                 element.Proxies = [ element.Proxies, cell(1) ];
             end
             element.ProxiesCount = element.ProxiesCount + 1;
             element.Proxies{element.ProxiesCount} = proxy;
-            database = element.DataBaseClass;
         end
 
         function delete(element)
             disp('Deleting CDummyRobot');
-            element.Disconnect();
+            if (~element.OfflineMode)
+                element.Disconnect();
+            end
             element.vrep.delete();
         end
     end

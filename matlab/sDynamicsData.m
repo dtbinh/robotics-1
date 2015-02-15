@@ -3,8 +3,10 @@ classdef sDynamicsData < handle
     %   Detailed explanation goes here
     
     properties
-        Vxy = 0.0;
-        Wxy = 0.0;
+        XSpeed = 0.0;
+        YSpeed = 0.0;
+        YawSpeed = 0.0;
+        Delta = 0;
     end
 
 end

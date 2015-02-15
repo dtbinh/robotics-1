@@ -9,6 +9,7 @@ classdef sPositionData
         Alpha = 0.0;
         Betha = 0.0;
         Gamma = 0.0;
+        Delta = 0;
     end
     
 end

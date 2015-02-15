@@ -16,7 +16,7 @@ classdef CDummyPosition2dProxy < CDummyClientProxy
             element.Robot.RegisterProxy(element);
         end
         
-        function Call(element)
+        function Call(element, database)
             clientID = element.Robot.ClientID;
             vrep = element.Robot.vrep;
             [err,data] = vrep.simxGetStringSignal( ...
@@ -36,12 +36,37 @@ classdef CDummyPosition2dProxy < CDummyClientProxy
                 element.RealPosition.Betha  = speeds(8);
                 element.RealPosition.Gamma  = speeds(9);
                 
+                % Manage database
+                pts = sPositionData;
+                pts = element.RealPosition;
+                database.AddPositionPoint(pts);
+                
+                dpts = sDynamicsData;
+                dpts.XSpeed = element.XSpeed;
+                dpts.YSpeed = element.YSpeed;
+                dpts.YawSpeed = element.YawSpeed;
+                database.AddDynamicsPoint(dpts);
+                
                 % Set as initialized on first data read
                 if (~element.IsInitialized)
                     element.IsInitialized = true;
                 end
             end    
         end
+        
+        function OfflineCall(element, database)
+            element.RealPosition = database.GetPositionPoint();
+            
+            dpts = database.GetDynamicsPoint();
+            element.XSpeed = dpts.XSpeed;
+            element.YSpeed = dpts.YSpeed;
+            element.YawSpeed = dpts.YawSpeed;
+            % Set as initialized on first data read
+            if (~element.IsInitialized)
+                element.IsInitialized = true;
+            end
+        end
+
     end
     
 end
