@@ -25,8 +25,9 @@ classdef CRobot < handle
         end
         
         function Update(element)
-            [dt, element.LastCallTime] = getDeltaTime(element.LastCallTime);
+            %[dt, element.LastCallTime] = getDeltaTime(element.LastCallTime);
             element.Connection.Read();
+            dt = element.Connection.GetDelta();
             if (element.PositionProxy.IsInitialized)
                 if (~element.IsInitialized)
                     element.IsInitialized = true;

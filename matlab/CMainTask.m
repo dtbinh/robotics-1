@@ -10,17 +10,28 @@ classdef CMainTask < handle
         Figure = [];
         Timer = [];
         Period = 0.1;
+        
+        OfflineMode = false;
     end
     
     methods
         function element = CMainTask(offlineMode)
             % Init robot
+            element.OfflineMode = offlineMode;
             element.Connection = CDummyRobot(offlineMode);
             element.Robot = CRobot(element.Connection);
             element.Experiment = CExperiment();
             
-            % Init task
-            element.Start();
+            element.Timer = [];
+            element.Figure = [];
+            
+            
+            if (~element.OfflineMode)
+                % Init task
+                element.Start();
+            else
+                element.RunOfflineCalculations();
+            end
         end
         
         function TaskFcn(element, ~, ~)
@@ -32,7 +43,18 @@ classdef CMainTask < handle
 
             element.Robot.Update();
 
-            
+            element.PlotTask();
+         
+        end
+        
+        function RunOfflineCalculations(element)
+            for kk = 1:100
+                element.Robot.Update();
+                element.PlotTask();
+            end
+        end
+        
+        function PlotTask(element)
             subplot(2, 2, [1 3], 'replace');
             element.Experiment.PlotEncoderTrajectory(element.Robot);
             hold on;
@@ -50,7 +72,7 @@ classdef CMainTask < handle
             subplot(2,2,4);
             element.Experiment.PlotRawPoints(element.Robot);
             axis('equal');
-%             axis([-10, 10, -10, 10]);            
+%             axis([-10, 10, -10, 10]);   
         end
         
         function PlotAllSensors(element)
@@ -86,7 +108,7 @@ classdef CMainTask < handle
                 'keypressfcn', @element.KeyPress, ...
                 'Name', 'Experiment data: press ''q'' to stop...' ...
             );
-            element.Timer = timer( ...
+            element.Timer = timer( 'Name', 'CMainTaskTmr', ...
                 'TimerFcn',{@element.TaskFcn}, ...
                 'Period', element.Period, ...
                 'ExecutionMode','fixedSpacing' ...
@@ -101,7 +123,10 @@ classdef CMainTask < handle
         
         function element = delete(element)
             disp('Deleting CMainTask');
-            element.Stop();
+            if (~element.OfflineMode)
+                element.Stop();
+                delete(element.Timer);
+            end
             element.Connection.Disconnect();
             delete(element.Experiment);
             delete(element.Robot);

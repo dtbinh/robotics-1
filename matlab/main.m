@@ -29,11 +29,13 @@
 % delete(tim);
 
 
-if (exist('task', 'var'))
-    task.delete();
-end
-clear task;
-pause(2);
+% if (exist('task', 'var'))
+%     task.delete();
+% end
+% clear task;
+% pause(2);
+
+clear all;
 
 task = CMainTask(true); % true = Offline mode
 

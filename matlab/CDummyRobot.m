@@ -12,6 +12,8 @@ classdef CDummyRobot < handle
         
         OfflineMode = false;
         DataBaseClass = [];%CDataBase(false);
+        Delta = 0;
+        LastCallTime = [];
     end
     
     methods
@@ -21,6 +23,7 @@ classdef CDummyRobot < handle
                 element.vrep = remApi('remoteApi');
                 element.Connect();
             end
+            element.LastCallTime = tic;
             element.DataBaseClass = CDataBase(offlineMode);
             element.Proxies = cell(1);
             element.Proxies{1} = CDummyClientProxy(element);
@@ -47,12 +50,18 @@ classdef CDummyRobot < handle
 %                     display(sprintf('Reading proxies: %d',k));
                         element.Proxies{k}.Call(element.DataBaseClass);
                 end
+                [element.Delta, element.LastCallTime] = getDeltaTime(element.LastCallTime);
             elseif (element.OfflineMode)
                 for k = 1:element.ProxiesCount
                     element.Proxies{k}.OfflineCall(element.DataBaseClass);
                 end
+                element.Delta = element.DataBaseClass.GetDelta();
                 element.DataBaseClass.StepNumber = element.DataBaseClass.StepNumber + 1;
             end
+        end
+        
+        function result = GetDelta(element)
+            result = element.Delta;
         end
         
         function Disconnect(element)

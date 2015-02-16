@@ -56,6 +56,17 @@ classdef CDataBase < handle
         function point = GetDynamicsPoint(element)
             point = element.DynamicPoints(element.StepNumber);
         end
+        
+        function result = GetDelta(element)
+            result = element.Delta(element.StepNumber);
+        end
+        
+        function IncrementStep(element)
+            stp = element.StepNumber;
+            if (stp < length(element.Delta))
+                element.StepNumber = stp + 1;
+            end
+        end
 
         function delete(element)
             if (~element.OfflineMode)
