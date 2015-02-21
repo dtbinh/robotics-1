@@ -61,10 +61,12 @@ classdef CDataBase < handle
             result = element.Delta(element.StepNumber);
         end
         
-        function IncrementStep(element)
+        function result = IncrementStep(element)
+            result = false;
             stp = element.StepNumber;
             if (stp < length(element.Delta))
                 element.StepNumber = stp + 1;
+                result = true;
             end
         end
 

@@ -48,8 +48,7 @@ classdef CMainTask < handle
         end
         
         function RunOfflineCalculations(element)
-            for kk = 1:100
-                element.Robot.Update();
+            while (element.Robot.Update())
                 element.PlotTask();
             end
         end

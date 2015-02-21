@@ -24,9 +24,10 @@ classdef CRobot < handle
             element.Dynamics = sDynamicsData;
         end
         
-        function Update(element)
+        function result = Update(element)
+%             result = false;
             %[dt, element.LastCallTime] = getDeltaTime(element.LastCallTime);
-            element.Connection.Read();
+            result = element.Connection.Read();
             dt = element.Connection.GetDelta();
             if (element.PositionProxy.IsInitialized)
                 if (~element.IsInitialized)

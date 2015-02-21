@@ -43,7 +43,8 @@ classdef CDummyRobot < handle
             disp(sprintf('Connection id: %d\n', element.ClientID));
         end
         
-        function Read(element)
+        function result = Read(element)
+            result = false;
             if (-1 ~= element.ClientID)
                 element.DataBaseClass.AddStep();
                 for k = 1:element.ProxiesCount
@@ -51,12 +52,14 @@ classdef CDummyRobot < handle
                         element.Proxies{k}.Call(element.DataBaseClass);
                 end
                 [element.Delta, element.LastCallTime] = getDeltaTime(element.LastCallTime);
+                result = true;
             elseif (element.OfflineMode)
                 for k = 1:element.ProxiesCount
                     element.Proxies{k}.OfflineCall(element.DataBaseClass);
                 end
                 element.Delta = element.DataBaseClass.GetDelta();
-                element.DataBaseClass.StepNumber = element.DataBaseClass.StepNumber + 1;
+%                 element.DataBaseClass.StepNumber = element.DataBaseClass.StepNumber + 1;
+                result = element.DataBaseClass.IncrementStep();
             end
         end
         
