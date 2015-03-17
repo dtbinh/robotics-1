@@ -12,6 +12,7 @@ classdef CRobot < handle
         RawPoints = []; %% zeros(16,2);
         Map = CMap();
         IsInitialized = false;
+        UseRealPosition = false;
     end
     
     methods
@@ -35,9 +36,15 @@ classdef CRobot < handle
                     % Match initial orientation
                     element.Position.Gamma = element.PositionProxy.RealPosition.Gamma;
                 end
-                element.Position.PosX = element.PositionProxy.XSpeed*dt + element.Position.PosX;
-                element.Position.PosY = element.PositionProxy.YSpeed*dt + element.Position.PosY;
-                element.Position.Gamma = element.PositionProxy.YawSpeed*dt + element.Position.Gamma;
+                if (~element.UseRealPosition)
+                    element.Position.PosX = element.PositionProxy.XSpeed*dt + element.Position.PosX;
+                    element.Position.PosY = element.PositionProxy.YSpeed*dt + element.Position.PosY;
+                    element.Position.Gamma = element.PositionProxy.YawSpeed*dt + element.Position.Gamma;
+                else
+                    element.Position.PosX = element.PositionProxy.RealPosition.PosX;
+                    element.Position.PosY = element.PositionProxy.RealPosition.PosY;
+                    element.Position.Gamma = element.PositionProxy.RealPosition.Gamma;
+                end
                 
                 element.Map.AddRobotEncoderPositionPoint(element.Position);
                 

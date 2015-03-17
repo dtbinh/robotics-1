@@ -39,6 +39,22 @@ classdef CDataBase < handle
             point = element.SonarPoints(element.StepNumber).Measurements;
         end
         
+        function point = GetSonarPointAsArray(element)
+            totalSteps = length(element.Delta);
+            point = zeros(totalSteps, 16);
+            for kk = 1:totalSteps
+                tmp = element.SonarPoints(kk).Measurements;
+                for pp = 1:16
+                    if (tmp(pp) == 99)
+                        tmp(pp) = NaN;
+                    end
+                end
+                point(kk,:) = tmp;
+            end
+            
+        end
+
+        
         function AddPositionPoint(element, point)
             point.Delta = length(element.Delta);
             element.PositionPoints = [element.PositionPoints; point];

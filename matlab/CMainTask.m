@@ -30,6 +30,7 @@ classdef CMainTask < handle
                 % Init task
                 element.Start();
             else
+                element.Robot.UseRealPosition = true;
                 element.RunOfflineCalculations();
             end
         end
@@ -49,7 +50,7 @@ classdef CMainTask < handle
         
         function RunOfflineCalculations(element)
             while (element.Robot.Update())
-                element.PlotTask();
+%                 element.PlotTask();
             end
         end
         

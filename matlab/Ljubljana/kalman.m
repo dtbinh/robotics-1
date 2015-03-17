@@ -31,7 +31,7 @@ y(1)=0;
 %y(4)=29;
 for g=2:20
 	y(g)=y(g-1)+10-rand(1)
-endfor
+end
 
 xc=x
 
@@ -53,6 +53,6 @@ for k=1:19
 	xc= xz+PC*C'*(N^(-1))*(y(k+1)-C*xz)
 	pospr(k+1)=xz(1);pos(k+1)=xc(1);
 	spdpr(k+1)=xz(2);spd(k+1)=xc(2);
-endfor
+end
 k=1:20;
 plot(k,pospr,k,pos,k,spdpr,k,spd,k,y);
