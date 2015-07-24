@@ -27,6 +27,19 @@ classdef CLine < handle
         function setNormXY(element, r, th)
             element.setNorm(element, r, th, 0.0);
         end
+        
+        function lineFromXY(element, x, y)
+            numPts = length(x);
+            
+            [element.a, element.b] = myLeastSuares(numPts, x, y);
+        end
+        
+        function Plot(element)
+            x = -1000:1000;
+            y = element.a * x + element.b;
+            figure();
+            plot(x, y, 'k-');
+        end
 
     end
     

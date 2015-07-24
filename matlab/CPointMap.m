@@ -3,7 +3,7 @@ classdef CPointMap < handle
     %   Detailed explanation goes here
     
     properties
-        Points = CPoint;
+        Points = [];
     end
     
     methods
@@ -13,6 +13,18 @@ classdef CPointMap < handle
         
         function addPoint(element, point)
             element.Points = [element.Points; point];
+        end
+        
+        function [X, Y, Z] = getPointArrays(element)
+            len = length(element.Points);
+            X = zeros(len, 1);
+            Y = zeros(len, 1);
+            Z = zeros(len, 1);
+            for kk = 1:len
+                X(kk) = element.Points(kk).X;
+                Y(kk) = element.Points(kk).Y;
+                Z(kk) = element.Points(kk).Z;
+            end
         end
 
         function PlotMap(element)

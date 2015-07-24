@@ -1,13 +1,16 @@
-classdef CLineSegment < handle
+classdef CLineSegment < CLine
     %CLINESEGMENT Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
-        Line = CLine();
-        Ends = [CPoint(), CPoint()];
+        Ends = [CPoint(); CPoint()];
     end
     
     methods
+        function element = CLineSegment(sBegin, sEnd)
+            element.Ends = [sBegin; sEnd];
+            
+        end
     end
     
 end
