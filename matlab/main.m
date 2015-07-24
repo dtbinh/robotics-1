@@ -37,7 +37,7 @@
 
 clear all;
 
-task = CMainTask(false); % true = Offline mode
+task = CMainTask(true); % true = Offline mode
 
 % clear all;
 

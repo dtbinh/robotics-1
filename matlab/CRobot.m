@@ -12,7 +12,7 @@ classdef CRobot < handle
         RawPoints = []; %% zeros(16,2);
         Map = CMap();
         IsInitialized = false;
-        UseRealPosition = false;
+        UseRealPosition = true;
     end
     
     methods
