@@ -4,7 +4,7 @@ classdef CLineSegmentMap < handle
     
     properties
         % An array of segments
-        Segments =  CLineSegment;
+        Segments =  [];
         PointMap = CPointMap();
     end
     
@@ -52,8 +52,8 @@ classdef CLineSegmentMap < handle
             end
         end
         
-        function result = shortestDistanceToSegment(element, segment)
-            
+        function result = shortestDistanceToSegment(element, point, segment)
+            result = segment.distanceFromPoint(point);
         end
         
         function PlotMap(element)

@@ -1,10 +1,10 @@
-function [a, b] = myLeastSuares(n, cx, cy)
+function [m, n] = myLeastSuares(n, cx, cy)
 %MYLEASTSUARES Summary of this function goes here
 %   Detailed explanation goes here
     
     if ( n == 1 )
-        a = 0.0;
-        b = cy(0);
+        m = 0.0;
+        n = cy(0);
         return;
     end
     
@@ -24,8 +24,8 @@ function [a, b] = myLeastSuares(n, cx, cy)
         bot = bot + ( cx(ii) - xbar ) * ( cx(ii) - xbar );
     end
     
-    a = top / bot;
-    b = ybar - a * xbar;
+    m = top / bot;
+    n = ybar - m * xbar;
     
 end
 
