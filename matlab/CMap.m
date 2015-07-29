@@ -29,6 +29,19 @@ classdef CMap < handle
             element.RobotEncoderArray = [ element.RobotEncoderArray; pt ];
         end
         
+        function result = getSensorPoints(element, sensorNumber)
+            pts = element.RawSensorPoints;
+            result = [];
+            if (~isempty(pts))
+                for kk = 1:length(pts(:,1))
+                    if (sensorNumber == pts(kk,1))
+                        point = CPoint(pts(kk,2), pts(kk, 3));
+                        result = [result; point];
+                    end
+                end
+            end
+        end
+        
         function delete(element)
 %             delete(element.RawPoints);
 %             delete(element.RobotEncoderPositions);

@@ -27,17 +27,21 @@ classdef CLineSegmentMap < handle
             result = false;
         end
         
-        function resultList = DouglasPeucker(element, pointList, epsilon)
+        function result = DouglasPeucker(element, pointList, epsilon)
             % Find the point with the maximum distance
             dmax = 0;
             index = 0;
             pend = length(pointList);
+            lin = CLineSegment(pointList(1), pointList(end));
+%             lin.Plot;
+            pointsIncluded = 0;
             for kk = 2 : (pend - 1)
-                d = shortestDistanceToSegment(pointList(kk), Line(pointList(1), pointList(end)));
+                d = element.shortestDistanceToSegment(pointList(kk), lin);
                 if ( d > dmax )
                     index = kk;
                     dmax = d;
                 end
+                pointsIncluded = pointsIncluded + 1;
             end
             % If max distance is greater than epsilon, recursively simplify
             if ( dmax > epsilon )
@@ -49,7 +53,12 @@ classdef CLineSegmentMap < handle
                 resultList = [recResults1(1:length(recResults1)-1), recResults2(1:length(recResults2))];
             else
                 resultList = [pointList(1), pointList(end)];
+                if (pointsIncluded > 5)
+                    newSeg = CLineSegment(pointList(1), pointList(end));
+                    element.addSegment(newSeg);
+                end
             end
+            result = resultList;
         end
         
         function result = shortestDistanceToSegment(element, point, segment)
@@ -61,14 +70,9 @@ classdef CLineSegmentMap < handle
             if len < 1
                 return;
             end
-            figure();
-            hold on;
             for kk = 1:len
-                x = element.Segments(kk).Ends(:,1);
-                y = element.Segments(kk).Ends(:,2);
-                plot(x, y);
+                element.Segments(kk).Plot;
             end
-            hold off;
         end
     end
     

@@ -22,7 +22,7 @@ plot(f(1,:),f(2,:),'ro');
 
 %y = zeros(length(a(1,:)),length(x));
 for k=1:length(a(1,:))
-	x=-10:0.1:10;
+	x=[];
 	if (abs(sin(a(1,k)))< sin(pi/4))
 		y=-10:0.1:10;
 		%y = x;%a(2,k) + 0*x;

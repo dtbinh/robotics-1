@@ -4,6 +4,7 @@ classdef CPointMap < handle
     
     properties
         Points = [];
+        Pointer = 0;
     end
     
     methods
@@ -32,14 +33,16 @@ classdef CPointMap < handle
             if len < 1
                 return;
             end
-            figure();
-            hold on;
+            x = [];
+            y = [];
             for kk = 1:len
-                x = element.Points(kk).X;
-                y = element.Points(kk).Y;
-                plot(x, y, 'r+');
+                x = [x; element.Points(kk).X];
+                y = [y; element.Points(kk).Y];
             end
-            hold off;
+            plot(x, y, 'r+');
+        end
+        
+        function result = getNexPoint(element)
         end
     end
     
