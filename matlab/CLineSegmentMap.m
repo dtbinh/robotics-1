@@ -27,6 +27,10 @@ classdef CLineSegmentMap < handle
             result = false;
         end
         
+        function NearestNeighbourSort(element, points)
+            
+        end
+        
         function result = DouglasPeucker(element, pointList, epsilon)
             % Find the point with the maximum distance
             dmax = 0;
@@ -50,13 +54,9 @@ classdef CLineSegmentMap < handle
                 recResults2 = element.DouglasPeucker(pointList(index:end), epsilon);
 
                 % Build the result list
-                resultList = [recResults1(1:length(recResults1)-1), recResults2(1:length(recResults2))];
+                resultList = [recResults1; recResults2];
             else
-                resultList = [pointList(1), pointList(end)];
-                if (pointsIncluded > 5)
-                    newSeg = CLineSegment(pointList(1), pointList(end));
-                    element.addSegment(newSeg);
-                end
+                resultList = CLineSegment(pointList(1), pointList(end));
             end
             result = resultList;
         end

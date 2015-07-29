@@ -23,10 +23,11 @@ sensor = CSensor();
 %     sensor.Map.addPoint(point);
 % end
 
-tmp = load('PointPositionData001');
+
 
 maxDistance = 0.05;
 
+tmp = load('PointPositionData001');
 len=length(tmp.pts(:,1));
 for kk=1:len
 %     point = CPoint();
@@ -38,7 +39,8 @@ end
 
 sensor.Map.PointMap.PlotMap();
 hold on
-sensor.Map.DouglasPeucker(sensor.Map.PointMap.Points, maxDistance);
+segments = sensor.Map.DouglasPeucker(sensor.Map.PointMap.Points, maxDistance);
+sensor.Map.Segments = segments;
 sensor.Map.PlotMap
 hold off
 
