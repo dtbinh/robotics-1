@@ -27,25 +27,46 @@ classdef CLineSegmentMap < handle
             result = false;
         end
         
-        function NearestNeighbourSort(element, points)
-            
+        function result = RANSAC(element, points, epsilon)
+            iterations = 20;
+            pts = points;
+            while ((iterations > 0)&&(~isempty(pts)))
+                pts = element.RANSAC_iteration(pts, epsilon);
+                iterations = iterations - 1;
+            end
+        end
+        
+        function result = RANSAC_iteration(element, points, epsilon)
+            beginSet = CPointSet(points);
+            inlierSet = CPointSet();
+            inlierSet.addPoint(beginSet.getRandomPoint);
+            inlierSet.addPoint(beginSet.getRandomPoint);
+            segment = CLineSegment(inlierSet.Points(1), inlierSet.Points(2));
+            point = beginSet.getPoint();
+            notOnLineSet = CPointSet();
+            while ~isempty(point)
+                if (segment.distanceFromPoint < epsilon)
+                    inlierSet.addPoint(point);
+                else
+                    notOnLineSet.addPoint(point);
+                end
+            end
+            result = notOnLineSet.Points;
         end
         
         function result = DouglasPeucker(element, pointList, epsilon)
             % Find the point with the maximum distance
+            resultList = [];
             dmax = 0;
             index = 0;
             pend = length(pointList);
             lin = CLineSegment(pointList(1), pointList(end));
-%             lin.Plot;
-            pointsIncluded = 0;
             for kk = 2 : (pend - 1)
                 d = element.shortestDistanceToSegment(pointList(kk), lin);
                 if ( d > dmax )
                     index = kk;
                     dmax = d;
                 end
-                pointsIncluded = pointsIncluded + 1;
             end
             % If max distance is greater than epsilon, recursively simplify
             if ( dmax > epsilon )
@@ -56,7 +77,9 @@ classdef CLineSegmentMap < handle
                 % Build the result list
                 resultList = [recResults1; recResults2];
             else
+                if length(pointList) > 5
                 resultList = CLineSegment(pointList(1), pointList(end));
+                end
             end
             result = resultList;
         end

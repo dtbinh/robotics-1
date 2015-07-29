@@ -25,7 +25,7 @@ sensor = CSensor();
 
 
 
-maxDistance = 0.05;
+maxDistance = 0.02;
 
 tmp = load('PointPositionData001');
 len=length(tmp.pts(:,1));

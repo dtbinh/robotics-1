@@ -24,6 +24,12 @@ classdef CPoint < handle
             end
         end
         
+        function result = distanceToPoint(element, point)
+            result = sqrt( (element.X - point.X)^2 + ...
+                (element.Y - point.Y)^2 + ...
+                (element.Z - point.Z)^2);
+        end
+        
         function Plot(element)
             plot(element.X, element.Y, 'r+')
         end

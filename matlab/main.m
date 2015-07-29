@@ -35,7 +35,9 @@
 % clear task;
 % pause(2);
 
+close all;
 clear all;
+clear classes;
 
 task = CMainTask(true); % true = Offline mode
 

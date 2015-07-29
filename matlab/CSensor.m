@@ -51,6 +51,13 @@ classdef CSensor < handle
             
         end
         
+        function result = getRAWMeasurement(element)
+        end
+        
+        function result = getCalculatedMeasurement(element)
+            
+        end
+        
         function Run(element)
             
         end
