@@ -32,9 +32,9 @@ classdef CDummyPosition2dProxy < CDummyClientProxy
                 element.RealPosition.PosX  = speeds(4);
                 element.RealPosition.PosY  = speeds(5);
                 element.RealPosition.PosZ  = speeds(6);
-                element.RealPosition.Alpha  = speeds(7);
-                element.RealPosition.Betha  = speeds(8);
-                element.RealPosition.Gamma  = speeds(9);
+                element.RealPosition.Alpha = speeds(7);
+                element.RealPosition.Beta  = speeds(8);
+                element.RealPosition.Gamma = speeds(9);
                 
                 % Manage database
                 pts = sPositionData;
