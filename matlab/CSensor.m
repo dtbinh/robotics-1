@@ -13,6 +13,8 @@ classdef CSensor < handle
         
         % Position data only X and Y position will be used
         Position = sPositionData();
+        LocalPosition = sPositionData();    % Position based on the robot CS
+        GlobalPosition = sPositionData();   % Position based on the world CS
     end
     
     properties (Access = private)
@@ -20,11 +22,21 @@ classdef CSensor < handle
     end
     
     methods
-        function element = CSensor()
+        function element = CSensor(localPosition)
+            element.LocalPosition = localPosition;
         end
         
-        function setPosition(element, positionData)
-            element.Position = positionData;
+        function TranslateParent(element, positionData)
+            % Get translation based on robot CS
+            Ts = CAlgorthms.GetTransformationMatrix(0, element.LocalPosition);
+            Tr = CAlgorthms.GetTransformationMatrix(0, positionData);
+            
+            Tsw = Ts*Tr;
+            
+        end
+        
+        function result = getGlobalPosition(element)
+            result = element.GlobalPosition;
         end
         
         function setPositionXY(element, x, y, gamma)
@@ -56,24 +68,6 @@ classdef CSensor < handle
         end
         
         function result = getCalculatedMeasurement(element)
-%             a = element.Position.Alpha;
-%             b = element.Position.Beta;
-%             g = element.Position.Gamma;
-%             x = element.Position.PosX;
-%             y = element.Position.PosY;
-%             z = element.Position.PosZ;
-%             
-%             syms s(h) c(h);
-%             s(h) = sin(h);
-%             c(h) = cos(h);
-%             
-%             % Source http://planning.cs.uiuc.edu/node104.html
-%             TM = [ c(a)*c(b),   c(a)*s(b)*s(g)-s(a)*c(g),   c(a)*s(b)*c(g)+s(a)*s(g),   x; ...
-%                    s(a)*c(b),   s(a)*s(b)*s(g)+c(a)*c(g),   s(a)*s(b)*c(g)-c(a)*s(g),   y; ...
-%                    -s(b),       c(b)*s(g),                  c(b)*c(g),                  z; ...
-%                    0,           0,                          0,                          1 ];
-%                
-%             TM = double(TM);
             TM = CAlgorthms.GetTransformationMatrix(0, element.Position);
             d = element.Distance;
             M = [ d; 0; 0; 1 ];
