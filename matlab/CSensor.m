@@ -12,9 +12,9 @@ classdef CSensor < handle
         Map = CLineSegmentMap();    % Map of line segments
         
         % Position data only X and Y position will be used
-        Position = sPositionData();
-        LocalPosition = sPositionData();    % Position based on the robot CS
-        GlobalPosition = sPositionData();   % Position based on the world CS
+        Position = CPosition();
+        LocalPosition = CPosition();    % Position based on the robot CS
+        GlobalPosition = CPosition();   % Position based on the world CS
     end
     
     properties (Access = private)
@@ -23,30 +23,25 @@ classdef CSensor < handle
     
     methods
         function element = CSensor(localPosition)
-            element.LocalPosition = localPosition;
+            lp = CPosition('pdata', localPosition);
+            element.LocalPosition = lp;
+            gp = CPosition('pdata', localPosition);
+            element.GlobalPosition = gp;
         end
         
         function TranslateParent(element, positionData)
             % Get translation based on robot CS
-            Ts = CAlgorthms.GetTransformationMatrix(0, element.LocalPosition);
-            Tr = CAlgorthms.GetTransformationMatrix(0, positionData);
+            Ts = element.LocalPosition.GetTransformationMatrix();
+            position = CPosition('pdata', positionData);
+            Tr = position.GetTransformationMatrix();
             
-            Tsw = Ts*Tr;
-            
+            Tsw = Tr * Ts;
+            position = CPosition('tmatrix', Tsw);
+            element.GlobalPosition = position;
         end
         
         function result = getGlobalPosition(element)
             result = element.GlobalPosition;
-        end
-        
-        function setPositionXY(element, x, y, gamma)
-        % Sets position of the element in 2D space. This function always
-        % sets the Z, Alpha and Beta dimmensions to 0.
-            position = sPositionData();
-            position.PosX = x;
-            position.PosY = y;
-            position.Gamma = gamma;
-            element.setPosition(position);
         end
         
         function setSpeeds(element, speeds)
@@ -68,7 +63,7 @@ classdef CSensor < handle
         end
         
         function result = getCalculatedMeasurement(element)
-            TM = CAlgorthms.GetTransformationMatrix(0, element.Position);
+            TM = element.GlobalPosition.GetTransformationMatrix();
             d = element.Distance;
             M = [ d; 0; 0; 1 ];
             
@@ -77,9 +72,7 @@ classdef CSensor < handle
         end
         
         function PlotSymbol(element)
-            m = CAlgorthms.GetTransformationMatrix( 0, ...
-                element.Position ...
-            );
+            m = element.GlobalPosition.GetTransformationMatrix();
             xy = [ ...
                 1, 0, -1, -1, 0; ...
                 0, 0, -1, 1, 0
@@ -103,8 +96,10 @@ classdef CSensor < handle
         end
         
         function PlotMeasurement(element)
-            pt = element.getCalculatedMeasurement;
-            pt.Plot;
+            if element.Distance < 2
+                pt = element.getCalculatedMeasurement;
+                pt.Plot;
+            end
         end
         
         function Run(element)
