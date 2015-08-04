@@ -15,6 +15,9 @@ classdef CSensor < handle
         Position = CPosition();
         LocalPosition = CPosition();    % Position based on the robot CS
         GlobalPosition = CPosition();   % Position based on the world CS
+        
+        % Temporary cycle time
+        Delta = 0.0;
     end
     
     properties (Access = private)
@@ -31,13 +34,52 @@ classdef CSensor < handle
         
         function TranslateParent(element, positionData)
             % Get translation based on robot CS
-            Ts = element.LocalPosition.GetTransformationMatrix();
+            Ts = element.LocalPosition.getTransformationMatrix();
             position = CPosition('pdata', positionData);
             Tr = position.GetTransformationMatrix();
             
             Tsw = Tr * Ts;
             position = CPosition('tmatrix', Tsw);
             element.GlobalPosition = position;
+        end
+        
+        function setInputs(element, parentSpeeds)
+            
+%             Tm = element.LocalPosition.getTransformationMatrix;
+            Vpx = parentSpeeds.Vx;
+            Vpy = parentSpeeds.Vy;
+%             Vpz = parentSpeeds.Vz;
+%             Wpx = parentSpeeds.Roll;
+%             Wpy = parentSpeeds.Pitch;
+            Wpz = parentSpeeds.Yaw;
+            % Wikipedia Denavit-Hartenberg_parameters
+%             W = [ 0,        -pYaw,  pPitch, pVx; ...
+%                   pYaw,     0,      -pRoll, pVy; ...
+%                   -pPitch,  pRoll,  0       pVz; ...
+%                   0,        0,      0,      0 ];
+%             Ws = Tm * W;
+%             
+%             speeds = sDynamicsData;
+%             speeds.Vx = Ws(1,4);
+%             speeds.Vy = Ws(2,4);
+%             speeds.Vz = Ws(3,4);
+%             speeds.Roll = pRoll;% Ws(3,2);
+%             speeds.Pitch = pPitch;% Ws(1,3);
+%             speeds.Yaw = pYaw;% Ws(2,1);
+            
+            Sx = element.LocalPosition.PositionData.PosX;
+            Sy = element.LocalPosition.PositionData.PosX;
+            
+            Vx = Vpx + Wpz * (sqrt(Sx^2 + Sy^2));
+            Vy = Vpy + Wpz * (sqrt(Sx^2 + Sy^2));
+            Wz = Wpz;
+
+            speeds = sDynamicsData;
+            speeds.Vx = Vx;
+            speeds.Vy = Vy;
+            speeds.Yaw = Wz;
+            
+            element.Speed = speeds;
         end
         
         function result = getGlobalPosition(element)
@@ -63,7 +105,7 @@ classdef CSensor < handle
         end
         
         function result = getCalculatedMeasurement(element)
-            TM = element.GlobalPosition.GetTransformationMatrix();
+            TM = element.GlobalPosition.getTransformationMatrix();
             d = element.Distance;
             M = [ d; 0; 0; 1 ];
             
@@ -72,7 +114,7 @@ classdef CSensor < handle
         end
         
         function PlotSymbol(element)
-            m = element.GlobalPosition.GetTransformationMatrix();
+            m = element.GlobalPosition.getTransformationMatrix();
             xy = [ ...
                 1, 0, -1, -1, 0; ...
                 0, 0, -1, 1, 0
@@ -103,7 +145,20 @@ classdef CSensor < handle
         end
         
         function Run(element)
-            
+            Tm = element.GlobalPosition.getTransformationMatrix;
+            pVx = element.Speed.Vx;
+            pVy = element.Speed.Vy;
+            pVz = element.Speed.Vz;
+            pRoll = element.Speed.Roll;
+            pPitch = element.Speed.Pitch;
+            pYaw = element.Speed.Yaw;
+            W = [ 0,        -pYaw,  pPitch, pVx; ...
+                  pYaw,     0,      -pRoll, pVy; ...
+                  -pPitch,  pRoll,  0       pVz; ...
+                  0,        0,      0,      0 ];
+            Tmn = Tm + W.*element.Delta;
+            position = CPosition('tmatrix', Tmn);
+            element.GlobalPosition = position;
         end
         
     end

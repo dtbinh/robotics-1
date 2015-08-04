@@ -1,0 +1,64 @@
+% Sensor No: 1
+sp = CPosition('XYg', 0.061905, 0.138200, 90.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 2
+sp = CPosition('XYg', 0.110930, 0.125051, 50.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 3
+sp = CPosition('XYg', 0.146105, 0.083135, 30.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 4
+sp = CPosition('XYg', 0.164690, 0.027275, 10.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 5
+sp = CPosition('XYg', 0.164690, -0.027272, -10.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 6
+sp = CPosition('XYg', 0.146071, -0.078500, -30.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 7
+sp = CPosition('XYg', 0.111048, -0.120238, -50.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 8
+sp = CPosition('XYg', 0.061905, -0.138143, -90.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 9
+sp = CPosition('XYg', -0.154795, -0.138150, -90.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 10
+sp = CPosition('XYg', -0.204038, -0.120241, -130.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 11
+sp = CPosition('XYg', -0.239053, -0.078500, -150.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 12
+sp = CPosition('XYg', -0.257680, -0.027274, -170.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 13
+sp = CPosition('XYg', -0.257680, 0.027274, 170.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 14
+sp = CPosition('XYg', -0.239061, 0.078500, 150.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 15
+sp = CPosition('XYg', -0.204039, 0.120265, 130.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+
+% Sensor No: 16
+sp = CPosition('XYg', -0.154795, 0.138200, 90.000000 * pi/180);
+sensor = [sensor; CSensor(sp.PositionData)];
+

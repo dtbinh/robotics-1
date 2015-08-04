@@ -53,7 +53,7 @@ classdef CPosition < handle
             element.fromPositionData(position);
         end
         
-        function m = GetTransformationMatrix(element)
+        function m = getTransformationMatrix(element)
             a = element.PositionData.Alpha;
             b = element.PositionData.Beta;
             g = element.PositionData.Gamma;
